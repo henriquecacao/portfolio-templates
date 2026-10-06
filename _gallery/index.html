@@ -3,88 +3,374 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Template Index — Henrique Roquete Cacao</title>
-  <meta name="description" content="Index of AI-assisted website templates by Henrique Roquete Cacao." />
-  <meta name="theme-color" content="#0E0E10" />
-  <!-- Deliberately quiet: this page is just the doorway to the templates.
-       The portfolio site is the real showcase; it reads /templates.json too. -->
+  <title>Henrique Roquete Cação — Website templates built with AI</title>
+  <meta name="description" content="Henrique Roquete Cação, a Global Design student at IADE in Lisbon, designs website templates and builds them with AI tools." />
+  <meta name="theme-color" content="#0B0B0B" />
+  <meta property="og:title" content="Henrique Roquete Cação — Website templates" />
+  <meta property="og:description" content="Website templates designed by Henrique Roquete Cação and built with AI." />
+
+  <!-- Type: Jost (geometric, a nod to the Century Gothic look of my CV) + JetBrains Mono for labels -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
   <style>
+    /* =====================================================
+       Black + orange, borrowed from the portfolio page of my CV:
+       dark panels, orange label tabs, offset orange frames.
+       ===================================================== */
     :root {
-      --bg: #0E0E10; --panel: #17171B; --line: #2A2A31; --ink: #F2F1EE; --muted: #9A99A3; --accent: #E8FF5A;
-      --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
-      --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --black: #0B0B0B;
+      --panel: #161616;
+      --panel-2: #1E1E1E;
+      --line: #2B2B2B;
+      --orange: #FF7A1A;
+      --orange-soft: #F7923A;
+      --ink: #F4F1EC;
+      --muted: #A7A29B;
+      --f-sans: "Jost", "Century Gothic", "Futura", system-ui, sans-serif;
+      --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      --wrap: 1180px;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--sans); }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--black); color: var(--ink); font: 17px/1.55 var(--f-sans); overflow-x: hidden; }
+    /* subtle print grain */
+    body::after {
+      content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .06;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
     a { color: inherit; }
-    .wrap { width: min(100% - 32px, 1160px); margin-inline: auto; }
-    header { padding: 64px 0 40px; border-bottom: 1px solid var(--line); }
-    .kicker { font: 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-    h1 { font-size: clamp(2.2rem, 6vw, 4.2rem); line-height: 1; letter-spacing: -.03em; margin: 14px 0 16px; font-weight: 700; }
-    h1 span { color: var(--accent); }
-    header p { color: var(--muted); max-width: 56ch; margin: 0; }
-    .count { font: 13px var(--mono); color: var(--muted); padding: 22px 0; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 80px; }
-    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
-    .card:hover { border-color: #44444D; transform: translateY(-3px); }
-    .thumb { aspect-ratio: 16 / 10; background: #222 center / cover no-repeat; display: block; border-bottom: 1px solid var(--line); }
-    .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-    .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-    h2 { margin: 0; font-size: 1.25rem; letter-spacing: -.01em; }
-    .date { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
-    .sub { color: var(--muted); margin: -6px 0 0; font-size: .95rem; }
-    .desc { margin: 0; font-size: .95rem; color: #CFCED6; flex: 1; }
-    .palette { display: flex; gap: 6px; }
-    .palette i { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); }
+    img { display: block; max-width: 100%; }
+    .wrap { width: min(100% - 32px, var(--wrap)); margin-inline: auto; }
+    ::selection { background: var(--orange); color: var(--black); }
+    :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+    /* ---------- shared pieces ---------- */
+    .tab {            /* orange label tab, straight from the CV */
+      display: inline-block; background: var(--orange); color: var(--black);
+      font: 600 13px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase;
+      padding: 9px 14px; box-shadow: 4px 4px 0 rgba(0,0,0,.6);
+    }
+    .frame {          /* panel with an offset orange outline */
+      position: relative; background: var(--panel); border: 2px solid var(--orange);
+      box-shadow: 8px 8px 0 #000;
+    }
+    .label { font: 12px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+    /* ---------- nav ---------- */
+    .nav { position: sticky; top: 0; z-index: 20; background: rgba(11,11,11,.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; }
+    .mono { display: grid; place-items: center; width: 40px; height: 40px; background: var(--orange); color: var(--black); font: 800 15px var(--f-sans); text-decoration: none; letter-spacing: -.02em; }
+    .nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
+    .nav ul a { text-decoration: none; font: 13px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    .nav ul a:hover { color: var(--orange); }
+    .status { display: inline-flex; align-items: center; gap: 8px; font: 12px var(--f-mono); color: var(--muted); }
+    .status i { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(255,122,26,.18); animation: pulse 2s infinite; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 8px rgba(255,122,26,0); } }
+
+    /* ---------- hero ---------- */
+    .hero { padding: clamp(48px, 8vw, 110px) 0 clamp(56px, 8vw, 100px); border-bottom: 1px solid var(--line); }
+    .hero .wrap { display: grid; grid-template-columns: 1.35fr .65fr; gap: clamp(28px, 5vw, 70px); align-items: center; }
+    .hero h1 { margin: 22px 0 26px; font-weight: 800; text-transform: uppercase; line-height: .9; letter-spacing: -.035em; font-size: clamp(3.2rem, 9.5vw, 8.4rem); padding-bottom: .08em; }
+    .hero h1 span { display: block; }
+    /* even rhythm: every line gets the same room, enough for the tilde on Ã and the Ç cedilla */
+    .hero h1 span + span { margin-top: .14em; }
+    .hero h1 .o { color: var(--orange); }
+    .lead { font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.45; max-width: 34ch; margin: 0 0 30px; color: #E6E1DA; }
+    .lead b { color: var(--orange); font-weight: 500; }
+    .ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 24px; text-decoration: none; font: 600 14px var(--f-mono); letter-spacing: .05em; text-transform: uppercase; border: 2px solid var(--orange); transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+    .btn--fill { background: var(--orange); color: var(--black); box-shadow: 5px 5px 0 #000; }
+    .btn--fill:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 #000; }
+    .btn--line { color: var(--orange); }
+    .btn--line:hover { background: var(--orange); color: var(--black); }
+
+    /* portrait: original colours inside the black + orange frame */
+    .portrait { margin: 0; justify-self: end; width: min(100%, 320px); }
+    .portrait .frame { padding: 12px; transform: rotate(2deg); transition: transform .4s; }
+    .portrait:hover .frame { transform: rotate(0deg); }
+    .duo { position: relative; aspect-ratio: 232 / 295; background: #000; overflow: hidden; border: 2px solid #000; }
+    .duo img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
+    .portrait:hover .duo img { transform: scale(1.04); }
+    .portrait figcaption { display: flex; justify-content: space-between; margin-top: 12px; padding: 0 2px; }
+
+    /* ---------- marquee of tools ---------- */
+    .ticker { background: var(--orange); color: var(--black); overflow: hidden; white-space: nowrap; border-block: 2px solid var(--black); }
+    .ticker div { display: inline-flex; gap: 34px; padding: 14px 0 14px 34px; animation: slide 30s linear infinite; font: 800 clamp(1.1rem, 2.4vw, 1.6rem) var(--f-sans); text-transform: uppercase; letter-spacing: -.01em; }
+    .ticker span::after { content: "✦"; margin-left: 34px; font-size: .7em; vertical-align: middle; }
+    @keyframes slide { to { transform: translateX(-50%); } }
+
+    /* ---------- sections ---------- */
+    section { padding: clamp(64px, 9vw, 120px) 0; }
+    .sec-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 40px; }
+    .sec-head h2 { margin: 14px 0 0; font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: .95; letter-spacing: -.03em; text-transform: uppercase; }
+    .sec-head p { margin: 0; color: var(--muted); max-width: 42ch; }
+
+    /* work grid (rendered from templates.json, grouped by section) */
+    .group + .group { margin-top: clamp(64px, 8vw, 110px); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
+    .card { display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s; }
+    .card:hover { transform: translate(-3px, -3px); box-shadow: 11px 11px 0 #000; }
+    .card .thumb { display: block; aspect-ratio: 16 / 10; background: var(--panel-2) center / cover no-repeat; border-bottom: 2px solid var(--orange); position: relative; }
+    .card .num { position: absolute; top: -2px; left: -2px; }
+    .card .body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .card h3 { margin: 0; font-size: 1.6rem; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+    .card .sub { margin: -4px 0 0; color: var(--orange-soft); font: 13px var(--f-mono); }
+    .card .desc { margin: 0; color: #D5D0C8; font-size: .98rem; flex: 1; }
+    .meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .palette { display: flex; }
+    .palette i { width: 18px; height: 18px; border-radius: 50%; margin-right: -5px; border: 2px solid var(--panel); }
     .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tags span { font: 11px var(--mono); padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
-    .concept { font: 11px var(--mono); color: var(--accent); }
+    .tags span { font: 11px var(--f-mono); padding: 4px 8px; border: 1px solid var(--line); color: var(--muted); }
+    .concept { margin: 0; font: 11px var(--f-mono); color: var(--orange); }
     .links { display: flex; gap: 10px; margin-top: 4px; }
-    .links a { font: 13px var(--mono); text-decoration: none; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); }
-    .links a.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-    .links a:hover { border-color: var(--accent); }
-    .empty { color: var(--muted); font: 14px var(--mono); padding: 40px 0; }
-    footer { border-top: 1px solid var(--line); padding: 24px 0 40px; color: var(--muted); font: 12px var(--mono); }
+    .links a { flex: 1; justify-content: center; padding: 12px 14px; font-size: 12px; }
+    .empty { color: var(--muted); font: 14px var(--f-mono); }
+
+    /* about */
+    .about-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; }
+    .about-text { padding: clamp(24px, 3vw, 38px); }
+    .about-text p { margin: 0 0 16px; color: #DDD8D0; }
+    .about-text p:first-child { font-size: 1.25rem; color: var(--ink); }
+    .about-text strong { color: var(--orange); font-weight: 500; }
+    .facts { display: grid; gap: 30px; }
+    .facts .frame { padding: 24px 26px; }
+    .facts h3 { margin: 0 0 16px; font: 600 13px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--orange); }
+    .langs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .langs li { display: flex; justify-content: space-between; align-items: center; }
+    .dots { display: flex; gap: 5px; }
+    .dots i { width: 22px; height: 6px; background: var(--line); }
+    .dots i.on { background: var(--orange); }
+    .about-grid > *, .facts > * { min-width: 0; }   /* let the carousel rows overflow without stretching the grid */
+    .tools { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; overflow: hidden; margin-inline: -26px; padding-inline: 0;
+             -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+    .tools__row { display: flex; gap: 10px; width: max-content; animation: slide 18s linear infinite; }
+    .tools__row--rev { animation-direction: reverse; animation-duration: 22s; }
+    .tools:hover .tools__row { animation-play-state: paused; }
+    .tools span { flex: none; font: 13px var(--f-mono); padding: 9px 14px; background: var(--panel-2); border-left: 3px solid var(--orange); white-space: nowrap; }
+
+    /* timeline */
+    .timeline { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--orange); }
+    .timeline li { padding: 22px 22px 0 0; position: relative; }
+    .timeline li::before { content: ""; position: absolute; top: -8px; left: 0; width: 14px; height: 14px; background: var(--orange); }
+    .timeline .when { font: 12px var(--f-mono); color: var(--orange); }
+    .timeline h4 { margin: 8px 0 6px; font-size: 1.1rem; font-weight: 700; line-height: 1.2; }
+    .timeline p { margin: 0; color: var(--muted); font-size: .92rem; }
+
+    /* contact */
+    .contact { border-top: 1px solid var(--line); }
+    .contact .frame { padding: clamp(28px, 5vw, 64px); display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: end; }
+    .contact h2 { margin: 16px 0 0; font-weight: 800; text-transform: uppercase; letter-spacing: -.035em; line-height: .92; font-size: clamp(2.4rem, 7vw, 5.6rem); }
+    .contact h2 a { color: var(--orange); text-decoration: none; display: inline-block; word-break: break-all; font-size: .42em; letter-spacing: -.01em; margin-top: 18px; border-bottom: 3px solid var(--orange); }
+    .contact h2 a:hover { color: var(--ink); }
+
+    footer { padding: 28px 0 40px; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+    /* reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s, transform .7s; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- responsive ---------- */
+    @media (max-width: 900px) {
+      .hero .wrap, .about-grid { grid-template-columns: 1fr; }
+      .portrait { justify-self: start; width: min(70%, 280px); order: -1; }
+      .timeline { grid-template-columns: 1fr 1fr; row-gap: 30px; }
+      .nav ul { display: none; }
+    }
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr; border-top: 0; border-left: 2px solid var(--orange); margin-left: 6px; }
+      .timeline li { padding: 0 0 26px 24px; }
+      .timeline li::before { top: 4px; left: -8px; }
+      .contact .frame { grid-template-columns: 1fr; }
+      .status span { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
-  <header class="wrap">
-    <p class="kicker">Template index</p>
-    <h1>Websites, built with <span>AI</span>.</h1>
-    <p>A growing set of website templates I designed and built with AI tools. Each one is a standalone live site, and the code is open to read.</p>
+
+  <header class="nav">
+    <div class="wrap">
+      <a href="#top" class="mono" aria-label="Home">HRC</a>
+      <ul>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <p class="status"><i></i><span>Open to opportunities</span></p>
+    </div>
   </header>
-  <main class="wrap">
-    <p class="count" id="count">Loading…</p>
-    <div class="grid" id="grid"></div>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <span class="tab">Global Design · IADE Lisbon</span>
+          <h1><span class="o">Henrique</span><span>Roquete</span><span>Cação</span></h1>
+          <p class="lead">I design websites and <b>build them with AI.</b> Each template here is a real, working site, from the visual concept to the code.</p>
+          <div class="ctas">
+            <a class="btn btn--fill" href="#work">See my work ↓</a>
+            <a class="btn btn--line" href="#contact">Get in touch</a>
+          </div>
+        </div>
+        <figure class="portrait">
+          <div class="frame"><div class="duo"><img src="assets/henrique.jpg" alt="Portrait of Henrique Roquete Cação" width="232" height="295"></div></div>
+          <figcaption><span class="label">Sintra, Portugal</span><span class="label">PT / EN</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true"><div id="ticker">
+      <span>Figma</span><span>Illustrator</span><span>Photoshop</span><span>Canva</span><span>Kling AI</span><span>HeyGen</span><span>Claude</span><span>Generative AI</span><span>Web design</span>
+    </div></div>
+
+    <!-- ============ TEMPLATES ============ -->
+    <section id="work">
+      <div class="wrap">
+        <!-- One block per "section" in template.json (e.g. One-Pager Templates).
+             A new section name automatically becomes a new block. -->
+        <div id="groups"></div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section id="about">
+      <div class="wrap">
+        <div class="sec-head reveal"><div><span class="tab">About</span><h2>Designer,<br>fast learner</h2></div></div>
+        <div class="about-grid">
+          <div class="frame about-text reveal">
+            <p>I'm a Global Design student at IADE in Lisbon. I've finished the curriculum and I'm waiting for credit equivalency for the units I took abroad.</p>
+            <p>I grew up in <strong>Switzerland</strong> and studied at international schools until 18, which is why I'm fluent in both <strong>Portuguese and English</strong>.</p>
+            <p>I'm adaptable, quick to pick up new tools and at home in cross-functional teams. Lately my focus has been <strong>generative AI</strong>: AI video, image-to-video and websites like the ones above.</p>
+            <p>Outside design: volleyball, music, video games and always some personal project on the go.</p>
+          </div>
+          <div class="facts">
+            <div class="frame reveal">
+              <h3>Languages</h3>
+              <ul class="langs" id="langs"></ul>
+            </div>
+            <div class="frame reveal">
+              <h3>Tools</h3>
+              <!-- two rows scrolling in opposite directions; JS duplicates each row for a seamless loop -->
+              <div class="tools" aria-label="Adobe Illustrator, Photoshop, Dreamweaver, Figma, Canva, Kling AI, HeyGen, Microsoft Office">
+                <div class="tools__row"><span>Adobe Illustrator</span><span>Photoshop</span><span>Dreamweaver</span><span>Figma</span></div>
+                <div class="tools__row tools__row--rev"><span>Canva</span><span>Kling AI</span><span>HeyGen</span><span>Microsoft Office</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ol class="timeline reveal">
+          <li><span class="when">2013 – 2018</span><h4>ISZL</h4><p>International School of Zug and Luzern, Switzerland. Middle and high school.</p></li>
+          <li><span class="when">2018 – 2021</span><h4>CAISL</h4><p>Carlucci American International School of Lisbon. IB Programme.</p></li>
+          <li><span class="when">Current</span><h4>IADE</h4><p>Global Design at Universidade Europeia, Lisbon.</p></li>
+          <li><span class="when">Mar – Nov 2025</span><h4>Lisbon Airport</h4><p>TTAE, ground traffic assistance technician.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="contact" id="contact">
+      <div class="wrap">
+        <div class="frame reveal">
+          <div>
+            <span class="tab">Contact</span>
+            <h2>Let's make<br>something.<br><a href="mailto:henriquecacao@outlook.com">henriquecacao@outlook.com</a></h2>
+          </div>
+          <p class="label">Based in Sintra · Working in PT &amp; EN</p>
+        </div>
+      </div>
+    </section>
   </main>
-  <footer class="wrap">Henrique Roquete Cacao · Global Design, IADE</footer>
+
+  <footer>
+    <div class="wrap">
+      <span class="label">© Henrique Roquete Cação</span>
+      <span class="label">Templates designed by me, built with AI</span>
+    </div>
+  </footer>
 
   <script>
-    // Renders cards from the same manifest the portfolio uses.
+    // ---------- languages (level 1–5, from my CV) ----------
+    const LANGS = [['Portuguese', 5], ['English', 5], ['Spanish', 2], ['German', 1]];
+    document.getElementById('langs').innerHTML = LANGS.map(([n, l]) =>
+      `<li><span>${n}</span><span class="dots" aria-label="${l} of 5">${[1,2,3,4,5].map(i => `<i class="${i <= l ? 'on' : ''}"></i>`).join('')}</span></li>`).join('');
+
+    // ---------- seamless ticker ----------
+    const t = document.getElementById('ticker'); t.innerHTML += t.innerHTML;
+    // tools carousel: repeat each row so the loop never shows a gap
+    document.querySelectorAll('.tools__row').forEach(r => { const h = r.innerHTML; r.innerHTML = h + h + h + h; r.setAttribute('aria-hidden', 'true'); });
+
+    // ---------- templates, rendered from the manifest the build creates ----------
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const groups = document.getElementById('groups');
+    const DEFAULT_SECTION = 'One-Pager Templates';
+    const INTRO = {   // optional one-liner per section; others show a project count
+      'One-Pager Templates': 'Single-page websites, each one a standalone live site with readable code. New ones appear here automatically.'
+    };
+
+    function card(t, i) {
+      return `
+          <article class="card frame reveal">
+            <a class="thumb" href="${esc(t.url)}" aria-label="Open ${esc(t.title)}" style="${t.thumbnail ? `background-image:url('${esc(t.thumbnail)}')` : ''}">
+              <span class="tab num">${String(i + 1).padStart(2, '0')}</span>
+            </a>
+            <div class="body">
+              <h3>${esc(t.title)}</h3>
+              ${t.subtitle ? `<p class="sub">${esc(t.subtitle)}</p>` : ''}
+              <p class="desc">${esc(t.description)}</p>
+              <div class="meta">
+                ${t.palette ? `<div class="palette">${t.palette.map(c => `<i style="background:${esc(c)}"></i>`).join('')}</div>` : '<span></span>'}
+                <span class="label">${esc(t.date)}</span>
+              </div>
+              ${t.tags ? `<div class="tags">${t.tags.map(x => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
+              ${t.concept ? `<p class="concept">⚑ ${esc(t.conceptNote || 'Unofficial concept')}</p>` : ''}
+              <div class="links">
+                <a class="btn btn--fill" href="${esc(t.url)}">Open live ↗</a>
+                ${t.source ? `<a class="btn btn--line" href="${esc(t.source)}">Code</a>` : ''}
+              </div>
+            </div>
+          </article>`;
+    }
+
     fetch('templates.json', { cache: 'no-store' })
       .then(r => r.json())
       .then(({ templates }) => {
-        document.getElementById('count').textContent = `${templates.length} template${templates.length === 1 ? '' : 's'}`;
-        if (!templates.length) { document.getElementById('grid').innerHTML = '<p class="empty">No templates yet.</p>'; return; }
-        document.getElementById('grid').innerHTML = templates.map(t => `
-          <article class="card">
-            <a class="thumb" href="${esc(t.url)}" aria-label="Open ${esc(t.title)}" style="${t.thumbnail ? `background-image:url('${esc(t.thumbnail)}')` : ''}"></a>
-            <div class="body">
-              <div class="top"><h2>${esc(t.title)}</h2><span class="date">${esc(t.date)}</span></div>
-              ${t.subtitle ? `<p class="sub">${esc(t.subtitle)}</p>` : ''}
-              <p class="desc">${esc(t.description)}</p>
-              ${t.palette ? `<div class="palette">${t.palette.map(c => `<i style="background:${esc(c)}"></i>`).join('')}</div>` : ''}
-              ${t.tags ? `<div class="tags">${t.tags.map(x => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
-              ${t.concept ? `<p class="concept">${esc(t.conceptNote || 'Unofficial concept')}</p>` : ''}
-              <div class="links">
-                <a class="primary" href="${esc(t.url)}">Open live ↗</a>
-                ${t.source ? `<a href="${esc(t.source)}">Code</a>` : ''}
-              </div>
+        if (!templates.length) { groups.innerHTML = '<p class="empty">First projects coming soon.</p>'; return; }
+        // group by section, keeping the manifest's order
+        const bySection = new Map();
+        templates.forEach(t => {
+          const k = t.section || DEFAULT_SECTION;
+          if (!bySection.has(k)) bySection.set(k, []);
+          bySection.get(k).push(t);
+        });
+        groups.innerHTML = [...bySection].map(([name, items], gi) => {
+          const w = esc(name).split(' ');
+          const title = w.length > 1 ? w.slice(0, -1).join(' ') + '<br>' + w[w.length - 1] : w[0];
+          return `
+          <div class="group">
+            <div class="sec-head reveal">
+              <div>${gi === 0 ? '<span class="tab">Work</span>' : ''}<h2>${title}</h2></div>
+              <p>${esc(INTRO[name] || `${items.length} project${items.length === 1 ? '' : 's'}`)}</p>
             </div>
-          </article>`).join('');
+            <div class="grid">${items.map(card).join('')}</div>
+          </div>`;
+        }).join('');
+        observe();
       })
-      .catch(() => { document.getElementById('count').textContent = 'Could not load templates.json'; });
+      .catch(() => { groups.innerHTML = '<p class="empty">Projects load once the site is deployed.</p>'; });
+
+    // ---------- reveal on scroll ----------
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+    function observe() { document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el)); }
+    observe();
   </script>
 </body>
 </html>

@@ -73,7 +73,7 @@
     q2: 'Are there vegan options?', a2: 'Yes. Pure açaí with fruit, granola and coconut is 100% plant-based. Ask for the smoothie with oat milk.',
     q3: 'Do you cater for events?', a3: 'We do — parties, offices and weddings. Get in touch 48h ahead.',
     q4: 'Can I pay with MB Way?', a4: 'Of course. We take MB Way, card and cash in every store.',
-    note: 'Unofficial website concept — portfolio piece by Henrique Roquete Cacao. Not affiliated with the Enjoy joy!® brand. Addresses and opening hours are sample content.'
+    note: 'Unofficial website concept — portfolio piece by Henrique Roquete Cação. Not affiliated with the Enjoy joy!® brand. Addresses and opening hours are sample content.'
   };
   const UI = {
     pt: { added: 'Adicionado ao pedido!', addedDish: n => `${n} adicionado ao pedido!`, okMail: 'Bem-vindo ao Joy Club! Vê o teu email.', badMail: 'Esse email não parece certo.', noTop: 'sem toppings' },

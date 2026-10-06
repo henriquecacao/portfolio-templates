@@ -1,6 +1,6 @@
 # portfolio-templates
 
-AI-assisted website templates by Henrique Roquete Cacao. Every folder is one standalone template.
+AI-assisted website templates by Henrique Roquete Cação. Every folder is one standalone template.
 The repo deploys to Vercel as **one site** (e.g. `templates.yourdomain.com`) and publishes a
 `templates.json` manifest. The portfolio site reads that manifest, so it updates by itself.
 
