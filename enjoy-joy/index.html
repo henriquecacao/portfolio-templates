@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enjoy joy! — Açaí bowls & copos</title>
+  <meta name="description" content="Enjoy joy! — o melhor açaí tem também o melhor preço. Copos, bowls e smoothies de açaí com fruta fresca. Monta o teu online." />
+  <meta name="theme-color" content="#2B0B45" />
+
+  <!-- Type system (chunky & playful):
+       Lilita One → heavy rounded display, like the "O MELHOR AÇAÍ" price posts
+       Nunito     → rounded humanist sans for body + UI, friendly and very legible
+       Fredoka    → used only for the Enjoy joy! wordmark (closest to the logo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Lilita+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ============ SVG SPRITE (shared brand shapes) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Brand mark: yellow speech bubble with a white heart -->
+    <symbol id="i-bubble" viewBox="0 0 64 60">
+      <path d="M10 2h44a8 8 0 0 1 8 8v28a8 8 0 0 1-8 8H40l-8 11-8-11H10a8 8 0 0 1-8-8V10a8 8 0 0 1 8-8z" fill="#FFC72C"/>
+      <path d="M32 37s-12-7.2-12-15a6.5 6.5 0 0 1 12-3.4A6.5 6.5 0 0 1 44 22c0 7.8-12 15-12 15z" fill="#fff"/>
+    </symbol>
+    <!-- Açaí palm leaf with veins (used as background pattern) -->
+    <symbol id="i-leaf" viewBox="0 0 120 200">
+      <path d="M60 4C18 46 8 112 60 196 112 112 102 46 60 4z" fill="currentColor"/>
+      <path d="M60 18v172M60 60 34 42M60 60l26-18M60 96 28 74M60 96l32-22M60 132 32 112M60 132l28-20" stroke="rgba(0,0,0,.18)" stroke-width="5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <!-- Açaí berry -->
+    <symbol id="i-berry" viewBox="0 0 100 100">
+      <circle cx="50" cy="52" r="44" fill="currentColor"/>
+      <circle cx="50" cy="52" r="10" fill="rgba(0,0,0,.35)"/>
+      <ellipse cx="34" cy="34" rx="10" ry="6" fill="rgba(255,255,255,.35)" transform="rotate(-35 34 34)"/>
+    </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 22">
+      <path d="M12 21S1 14.4 1 7.3A5.7 5.7 0 0 1 12 4.4a5.7 5.7 0 0 1 11 2.9C23 14.4 12 21 12 21z" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-burst" viewBox="0 0 200 200">
+      <path fill="currentColor" d="M100 0l16 30 32-14-2 35 35 4-21 28 26 23-33 11 9 34-34-8-12 33-16-31-16 31-12-33-34 8 9-34-33-11 26-23-21-28 35-4-2-35 32 14z"/>
+    </symbol>
+    <!-- Hand-drawn style smiley -->
+    <symbol id="i-smile" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#FFC72C"/>
+      <ellipse cx="35" cy="40" rx="5" ry="9" fill="#2B0B45"/>
+      <ellipse cx="65" cy="40" rx="5" ry="9" fill="#2B0B45"/>
+      <path d="M26 58c8 16 40 16 48 0" stroke="#2B0B45" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <ellipse cx="24" cy="56" rx="7" ry="4" fill="#C7A6F2"/><ellipse cx="76" cy="56" rx="7" ry="4" fill="#C7A6F2"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============ PROMO MARQUEE ============ -->
+<div class="promo" aria-label="Promoções">
+  <div class="promo__track">
+    <!-- duplicated once in JS for a seamless loop -->
+    <span data-i18n="promo1">Mesmo preço, mais quantidade</span><svg><use href="#i-spark"/></svg>
+    <span data-i18n="promo2">Encomenda online, levanta na loja</span><svg><use href="#i-spark"/></svg>
+    <span data-i18n="promo3">Junta 9 carimbos, o 10.º é nosso</span><svg><use href="#i-spark"/></svg>
+    <span>Dá like! @enjoyjoy</span><svg><use href="#i-spark"/></svg>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="top">
+  <a href="#top" class="logo" aria-label="Enjoy joy! início">
+    <svg class="logo__bubble"><use href="#i-bubble"/></svg>
+    <span class="logo__word">Enjoy joy!<sup>®</sup></span>
+  </a>
+  <nav class="nav__links" id="navLinks" aria-label="Principal">
+    <a href="#tamanhos" data-i18n="nav1">Tamanhos</a>
+    <a href="#monta" data-i18n="nav2">Monta o teu</a>
+    <a href="#menu" data-i18n="nav3">Menu</a>
+    <a href="#joyclub" data-i18n="nav4">Joy Club</a>
+    <a href="#lojas" data-i18n="nav5">Lojas</a>
+  </nav>
+  <div class="nav__actions">
+    <button class="lang" id="langBtn" aria-label="Mudar língua / switch language"><span class="is-on">PT</span>/<span>EN</span></button>
+    <a href="#monta" class="btn btn--yellow btn--sm nav__cta">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>
+      <span data-i18n="order">Encomendar</span>
+      <span class="cart" id="cartCount" aria-label="itens no pedido">0</span>
+    </a>
+    <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <!-- Animated glossy açaí liquid (WebGL shader, js/liquid.js) -->
+  <canvas class="hero__liquid" id="liquid" aria-hidden="true"></canvas>
+  <div class="hero__veil" aria-hidden="true"></div>
+
+  <div class="hero__inner wrap">
+    <div class="hero__copy reveal">
+      <p class="chip chip--yellow"><svg><use href="#i-heart"/></svg> <span data-i18n="heroChip">Açaí a sério, com fruta fresca</span></p>
+      <h1 class="hero__title">
+        <span class="script" data-i18n="heroT1">o melhor</span>
+        <span class="mega">AÇAÍ</span>
+        <span class="script script--sm" data-i18n="heroT2">tem também</span>
+        <span class="big" data-i18n="heroT3">o melhor preço!</span>
+      </h1>
+      <p class="hero__lead" data-i18n="heroLead">Copos e bowls carregados de fruta fresca, granola estaladiça e aquele roxo que dá vontade de partilhar. Tu montas, nós servimos.</p>
+      <div class="hero__ctas">
+        <a href="#monta" class="btn btn--yellow" data-i18n="heroCta1">Monta o teu açaí</a>
+        <a href="#menu" class="btn btn--ghost" data-i18n="heroCta2">Ver menu</a>
+      </div>
+      <ul class="hero__facts">
+        <li><b>3</b> <span data-i18n="fact1">tamanhos</span></li>
+        <li><b>7</b> <span data-i18n="fact2">toppings</span></li>
+        <li><b>4,95€</b> <span data-i18n="fact3">a partir de</span></li>
+      </ul>
+    </div>
+
+    <div class="hero__stage reveal">
+      <!-- Photo-3D açaí cup — js/cup3d.js wraps a product photo around real geometry -->
+      <canvas id="heroCup" class="cup-canvas" aria-label="Copo de açaí Enjoy joy! em 3D. Arrasta para rodar." role="img"></canvas>
+      <div class="cup-shadow"></div>
+
+      <!-- Rotating circular badge -->
+      <div class="badge-rotate" aria-hidden="true">
+        <svg viewBox="0 0 200 200" class="badge-rotate__ring">
+          <defs><path id="circ" d="M100 100m-78 0a78 78 0 1 1 156 0a78 78 0 1 1-156 0"/></defs>
+          <circle cx="100" cy="100" r="98" fill="#fff"/>
+          <text><textPath href="#circ" data-i18n="badge">só um açaí para me deixar feliz ✦ só um açaí para me deixar feliz ✦</textPath></text>
+        </svg>
+        <svg class="badge-rotate__smile"><use href="#i-smile"/></svg>
+      </div>
+
+      <!-- Starburst sticker -->
+      <div class="burst" aria-hidden="true">
+        <svg><use href="#i-burst"/></svg>
+        <span data-i18n="burst">vai um<br><b>açaí</b><br>aí?</span>
+      </div>
+
+      <p class="drag-hint" aria-hidden="true"><span class="drag-hint__icon">↻</span> <span data-i18n="drag">arrasta para rodar</span></p>
+    </div>
+  </div>
+
+  <svg class="wave wave--yellow" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40c240 40 480 40 720 0s480-40 720 0v40H0z"/></svg>
+</section>
+
+<!-- ============ INGREDIENT MARQUEE ============ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <span>AÇAÍ</span><svg><use href="#i-heart"/></svg><span>MORANGO</span><svg><use href="#i-heart"/></svg><span>BANANA</span><svg><use href="#i-heart"/></svg><span>KIWI</span><svg><use href="#i-heart"/></svg><span>GRANOLA</span><svg><use href="#i-heart"/></svg><span>CUPUAÇU</span><svg><use href="#i-heart"/></svg><span>MIRTILOS</span><svg><use href="#i-heart"/></svg>
+  </div>
+</div>
+
+<!-- ============ SIZES / PRICING ============ -->
+<section class="sizes" id="tamanhos">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <h2 class="display">
+        <span data-i18n="sizesT1">O tamanho</span>
+        <span class="script script--violet" data-i18n="sizesT2">certo para</span>
+        <span class="display--yellow" data-i18n="sizesT3">cada fome!</span>
+      </h2>
+      <p class="sec-lead" data-i18n="sizesLead">Todos incluem 3 toppings à escolha. Mesmo preço, mais quantidade — sem truques.</p>
+    </header>
+
+    <div class="sizes__grid">
+      <!-- Each card: hanging price tag + flat cup illustration -->
+      <article class="size reveal" data-size="250">
+        <div class="tag tag--purple"><span class="tag__price">4,95€</span><span class="tag__ml">250ml</span></div>
+        <div class="size__illo"><img src="assets/cup-front.webp" alt="" class="size__cup size__cup--s" loading="lazy"></div>
+        <h3 data-i18n="s1n">Copo Joy</h3>
+        <p data-i18n="s1d">O lanche perfeito para a tarde — ou para depois do ginásio.</p>
+        <button class="btn btn--violet btn--sm js-pick-size" data-size="250" data-i18n="pick">Escolher</button>
+      </article>
+
+      <article class="size size--featured reveal" data-size="350">
+        <span class="ribbon" data-i18n="fav">O favorito</span>
+        <div class="tag tag--yellow"><span class="tag__price">5,95€</span><span class="tag__ml">350ml</span></div>
+        <div class="size__illo"><img src="assets/cup-front.webp" alt="" class="size__cup size__cup--m" loading="lazy"></div>
+        <h3 data-i18n="s2n">Copo Joy Max</h3>
+        <p data-i18n="s2d">A escolha de quem já provou. Camadas de açaí, fruta e granola.</p>
+        <button class="btn btn--yellow btn--sm js-pick-size" data-size="350" data-i18n="pick">Escolher</button>
+      </article>
+
+      <article class="size reveal" data-size="500">
+        <div class="tag tag--purple"><span class="tag__price">8,50€</span><span class="tag__ml">500ml</span></div>
+        <div class="size__illo"><span class="size__bowl" aria-hidden="true"></span></div>
+        <h3 data-i18n="s3n">Bowl Joy</h3>
+        <p data-i18n="s3d">Para partilhar. Ou não — não julgamos ninguém.</p>
+        <button class="btn btn--violet btn--sm js-pick-size" data-size="500" data-i18n="pick">Escolher</button>
+      </article>
+    </div>
+  </div>
+  <svg class="wave wave--violet" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50c180-40 420-60 720-20s560 30 720-10v60H0z"/></svg>
+</section>
+
+<!-- ============ BUILDER ============ -->
+<section class="builder" id="monta">
+  <!-- decorative leaves -->
+  <svg class="leaf leaf--a" aria-hidden="true"><use href="#i-leaf"/></svg>
+  <svg class="leaf leaf--b" aria-hidden="true"><use href="#i-leaf"/></svg>
+  <svg class="leaf leaf--c" aria-hidden="true"><use href="#i-leaf"/></svg>
+
+  <div class="wrap builder__grid">
+    <div class="builder__stage">
+      <div class="builder__stage-inner">
+        <canvas id="builderCup" class="cup-canvas" aria-label="Pré-visualização 3D do teu açaí" role="img"></canvas>
+        <!-- selected toppings orbit the cup (photo crops, js/main.js) -->
+        <div class="orbit" id="orbit" aria-hidden="true"></div>
+        <div class="cup-shadow"></div>
+        <p class="drag-hint drag-hint--light"><span class="drag-hint__icon">↻</span> <span data-i18n="drag">arrasta para rodar</span></p>
+      </div>
+    </div>
+
+    <div class="builder__panel">
+      <header class="reveal">
+        <h2 class="display display--light">
+          <span data-i18n="bT1">Monta o teu</span>
+          <span class="display--yellow" data-i18n="bT2">açaí perfeito!</span>
+        </h2>
+        <p class="sec-lead sec-lead--light" data-i18n="bLead">Escolhe o tamanho, a base e os toppings. O teu copo muda em tempo real.</p>
+      </header>
+
+      <form class="builder__form" id="builderForm" onsubmit="return false">
+        <fieldset class="step">
+          <legend><span class="step__n">1</span> <span data-i18n="st1">Tamanho</span></legend>
+          <div class="opts" id="optSize">
+            <label class="opt"><input type="radio" name="size" value="250"><span>250ml <small>4,95€</small></span></label>
+            <label class="opt"><input type="radio" name="size" value="350" checked><span>350ml <small>5,95€</small></span></label>
+            <label class="opt"><input type="radio" name="size" value="500"><span>500ml <small>8,50€</small></span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="step">
+          <legend><span class="step__n">2</span> <span data-i18n="st2">Base</span></legend>
+          <div class="opts" id="optBase">
+            <label class="opt"><input type="radio" name="base" value="acai" checked><span data-i18n="b1">Açaí puro</span></label>
+            <label class="opt"><input type="radio" name="base" value="banana"><span data-i18n="b2">Açaí + banana</span></label>
+            <label class="opt"><input type="radio" name="base" value="cupuacu"><span><span data-i18n="b3">Cupuaçu</span> <small>+0,50€</small></span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="step">
+          <legend><span class="step__n">3</span> <span data-i18n="st3">Toppings</span> <em class="step__note" data-i18n="st3n">3 incluídos · extra +0,60€</em></legend>
+          <div class="opts opts--chips" id="optTop">
+            <!-- --dot sets the swatch colour for each topping chip -->
+            <label class="chipopt" style="--dot:#D62839"><input type="checkbox" name="top" value="morango" checked><span data-i18n="t1">Morango</span></label>
+            <label class="chipopt" style="--dot:#F6E3A1"><input type="checkbox" name="top" value="banana" checked><span data-i18n="t2">Banana</span></label>
+            <label class="chipopt" style="--dot:#7DBA2C"><input type="checkbox" name="top" value="kiwi" checked><span data-i18n="t3">Kiwi</span></label>
+            <label class="chipopt" style="--dot:#3B3A8C"><input type="checkbox" name="top" value="mirtilo"><span data-i18n="t4">Mirtilos</span></label>
+            <label class="chipopt" style="--dot:#B97A3A"><input type="checkbox" name="top" value="granola" checked><span data-i18n="t5">Granola</span></label>
+            <label class="chipopt" style="--dot:#FFFFFF"><input type="checkbox" name="top" value="coco"><span data-i18n="t6">Coco ralado</span></label>
+            <label class="chipopt" style="--dot:#FFF3D6"><input type="checkbox" name="top" value="leite"><span data-i18n="t7">Leite condensado</span></label>
+          </div>
+        </fieldset>
+
+        <div class="summary" aria-live="polite">
+          <div>
+            <p class="summary__label" data-i18n="yours">O teu Joy</p>
+            <p class="summary__desc" id="sumDesc">350ml · Açaí puro · Morango, Banana, Kiwi, Granola</p>
+          </div>
+          <p class="summary__price" id="sumPrice">6,55€</p>
+          <button class="btn btn--yellow summary__btn" id="addBtn" type="button" data-i18n="add">Adicionar ao pedido</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <svg class="wave wave--yellow" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30c300 50 520 50 760 10s460-40 680 0v40H0z"/></svg>
+</section>
+
+<!-- ============ MENU ============ -->
+<section class="menu" id="menu">
+  <div class="wrap">
+    <header class="sec-head sec-head--row reveal">
+      <h2 class="display display--purple">
+        <span data-i18n="mT1">Escolha do</span>
+        <span class="script script--violet" data-i18n="mT2">chefe</span>
+      </h2>
+      <div class="tabs" role="tablist" id="menuTabs">
+        <button role="tab" aria-selected="true" data-filter="all" data-i18n="f0">Todos</button>
+        <button role="tab" aria-selected="false" data-filter="bowl" data-i18n="f1">Bowls</button>
+        <button role="tab" aria-selected="false" data-filter="copo" data-i18n="f2">Copos & smoothies</button>
+        <button role="tab" aria-selected="false" data-filter="levar" data-i18n="f3">Para levar</button>
+      </div>
+    </header>
+    <!-- Cards are rendered from data in js/main.js so the menu is easy to edit -->
+    <div class="menu__grid" id="menuGrid"></div>
+  </div>
+</section>
+
+<!-- ============ DID YOU KNOW ============ -->
+<section class="know" id="sabias">
+  <svg class="leaf leaf--d" aria-hidden="true"><use href="#i-leaf"/></svg>
+  <svg class="berry berry--a" aria-hidden="true"><use href="#i-berry"/></svg>
+  <svg class="berry berry--b" aria-hidden="true"><use href="#i-berry"/></svg>
+  <div class="wrap know__grid">
+    <div class="reveal">
+      <h2 class="mega-title" data-i18n="kT">Sabias<br>que?</h2>
+      <p class="know__statement"><span data-i18n="kS1">O açaí é um dos frutos</span> <mark data-i18n="kS2">mais energéticos</mark> <span data-i18n="kS3">da Amazónia!</span></p>
+      <p class="know__body" data-i18n="kB">Além de delicioso, é naturalmente rico em antioxidantes e gorduras boas. Perfeito para recarregar energias — sem pedir licença.</p>
+    </div>
+    <ul class="benefits">
+      <li class="benefit reveal"><span class="benefit__icon">✦</span><h3 data-i18n="k1t">Antioxidantes</h3><p data-i18n="k1d">As antocianinas dão-lhe o roxo intenso — e uma ajuda extra ao teu dia.</p></li>
+      <li class="benefit reveal"><span class="benefit__icon">⚡</span><h3 data-i18n="k2t">Energia natural</h3><p data-i18n="k2d">Gorduras boas e fruta fresca: energia que dura a tarde toda.</p></li>
+      <li class="benefit reveal"><span class="benefit__icon">❋</span><h3 data-i18n="k3t">Fibra</h3><p data-i18n="k3d">Granola e fruta inteira para te manter saciado até ao jantar.</p></li>
+    </ul>
+    <div class="treino reveal">
+      <p class="treino__kicker" data-i18n="trK">Perfeito para</p>
+      <p class="treino__title"><span data-i18n="trT1">antes e depois do</span> <b data-i18n="trT2">treino.</b></p>
+      <a href="#menu" class="btn btn--purple btn--sm" data-i18n="trC">Ver o Power Treino</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOCIAL WALL ============ -->
+<section class="social" id="dalike">
+  <div class="wrap">
+    <header class="sec-head sec-head--row reveal">
+      <h2 class="display display--light">
+        <span data-i18n="soT1">Dá like!</span>
+        <span class="script script--yellow">@enjoyjoy</span>
+      </h2>
+      <a class="btn btn--yellow btn--sm" href="#" aria-label="Instagram" data-i18n="soC">Segue-nos no Instagram</a>
+    </header>
+    <div class="wall">
+      <div class="post post--yellow reveal"><svg class="post__smile"><use href="#i-smile"/></svg><p data-i18n="p1">só um açaí para me deixar feliz</p></div>
+      <div class="post post--violet post--tall reveal"><p class="post__big" data-i18n="p2">dás-me<br>água na<br>boca!</p><svg class="post__berry"><use href="#i-berry"/></svg></div>
+      <div class="post post--plum post--photo reveal"><span class="post__bowl" aria-hidden="true"></span><span class="post__heart"><svg><use href="#i-bubble"/></svg></span></div>
+      <div class="post post--lav reveal"><p class="post__big post__big--purple"><span data-i18n="p4a">O sabor</span><br><span class="script script--violet" data-i18n="p4b">do Brasil</span></p></div>
+      <div class="post post--yellow post--wide reveal"><p class="post__big post__big--purple" data-i18n="p5">mesmo preço,<br>mais quantidade</p><img src="assets/cup-front.webp" alt="" class="post__cup" loading="lazy"></div>
+      <div class="post post--green reveal"><svg class="post__burst"><use href="#i-burst"/></svg><p class="post__burst-t" data-i18n="burst">vai um<br><b>açaí</b><br>aí?</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ JOY CLUB (loyalty) ============ -->
+<section class="club" id="joyclub">
+  <div class="wrap club__grid">
+    <div class="loyalty reveal" aria-label="Cartão de fidelização">
+      <div class="loyalty__head">
+        <span class="logo__word logo__word--sm">Enjoy joy!<sup>®</sup></span>
+        <span class="loyalty__name" data-i18n="cardN">Cartão Joy</span>
+      </div>
+      <ol class="stamps" id="stamps"></ol>
+      <p class="loyalty__foot" data-i18n="cardF">Ao 10.º, o açaí é por nossa conta.</p>
+    </div>
+    <div class="reveal">
+      <h2 class="display display--light"><span data-i18n="cT1">Junta-te ao</span> <span class="display--yellow">Joy Club</span></h2>
+      <p class="sec-lead sec-lead--light" data-i18n="cLead">Carimbos digitais, sabores em primeira mão e um açaí oferta no teu aniversário.</p>
+      <form class="news" id="newsForm" novalidate>
+        <label for="email" class="sr-only">Email</label>
+        <input id="email" type="email" placeholder="o.teu@email.pt" required />
+        <button class="btn btn--yellow" type="submit" data-i18n="cBtn">Quero entrar</button>
+      </form>
+      <p class="news__msg" id="newsMsg" role="status"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STORES + FAQ ============ -->
+<section class="stores" id="lojas">
+  <div class="wrap stores__grid">
+    <div>
+      <header class="sec-head reveal">
+        <h2 class="display display--purple"><span data-i18n="lT1">Encontra a tua</span> <span class="script script--violet" data-i18n="lT2">loja</span></h2>
+      </header>
+      <!-- Stylised map (SVG) — swap for an embedded map in production -->
+      <div class="map reveal" aria-hidden="true">
+        <svg viewBox="0 0 400 240">
+          <rect width="400" height="240" rx="24" fill="#EBDDFC"/>
+          <path d="M0 170c60-20 120 10 190-10s140-50 210-30v110H0z" fill="#C7A6F2"/>
+          <path d="M30 40 380 200M60 220 320 20M0 110h400" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+          <path d="M30 40 380 200M60 220 320 20M0 110h400" stroke="#D9C6F7" stroke-width="2" stroke-dasharray="6 8"/>
+          <g transform="translate(140 92)"><g class="pin"><path d="M0 0c-14 0-24 10-24 23 0 17 24 37 24 37s24-20 24-37C24 10 14 0 0 0z" fill="#6A1FA8"/><circle cy="22" r="8" fill="#FFC72C"/></g></g>
+          <g transform="translate(276 120)"><g class="pin pin--2"><path d="M0 0c-14 0-24 10-24 23 0 17 24 37 24 37s24-20 24-37C24 10 14 0 0 0z" fill="#6A1FA8"/><circle cy="22" r="8" fill="#FFC72C"/></g></g>
+        </svg>
+      </div>
+      <div class="store-cards">
+        <article class="store reveal">
+          <h3>Joy Centro</h3>
+          <p>Rua Exemplo, 123 · 1100-000 Lisboa</p>
+          <p class="store__hours"><span data-i18n="h1">Seg–Sáb</span> 11:00–21:00 · <span data-i18n="h2">Dom</span> 12:00–20:00</p>
+        </article>
+        <article class="store reveal">
+          <h3>Joy Praia</h3>
+          <p>Avenida Exemplo, 45 · 2750-000 Cascais</p>
+          <p class="store__hours"><span data-i18n="h3">Todos os dias</span> 10:00–22:00</p>
+        </article>
+      </div>
+      <div class="delivery reveal">
+        <p data-i18n="dl">Também em casa, via:</p>
+        <a href="#">Uber Eats</a><a href="#">Glovo</a><a href="#">Bolt Food</a>
+      </div>
+    </div>
+
+    <div class="faq reveal">
+      <h3 class="faq__title" data-i18n="qT">Perguntas rápidas</h3>
+      <details open><summary data-i18n="q1">O açaí tem açúcar adicionado?</summary><p data-i18n="a1">A base de açaí puro não. Os toppings doces, como o leite condensado, são opcionais — tu decides.</p></details>
+      <details><summary data-i18n="q2">Há opções vegan?</summary><p data-i18n="a2">Sim. Açaí puro com fruta, granola e coco é 100% vegetal. Pede o smoothie com leite de aveia.</p></details>
+      <details><summary data-i18n="q3">Fazem encomendas para eventos?</summary><p data-i18n="a3">Fazemos — festas, escritórios e casamentos. Fala connosco com 48h de antecedência.</p></details>
+      <details><summary data-i18n="q4">Posso pagar com MB Way?</summary><p data-i18n="a4">Claro. Aceitamos MB Way, cartão e dinheiro em todas as lojas.</p></details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <p class="footer__word">Enjoy joy!<sup>®</sup></p>
+    <div class="footer__row">
+      <nav class="footer__links" aria-label="Rodapé">
+        <a href="#tamanhos" data-i18n="nav1">Tamanhos</a><a href="#monta" data-i18n="nav2">Monta o teu</a><a href="#menu" data-i18n="nav3">Menu</a><a href="#lojas" data-i18n="nav5">Lojas</a>
+      </nav>
+      <div class="footer__social">
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 3c.5 3 2.5 5 5.5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z" fill="currentColor"/></svg></a>
+      </div>
+    </div>
+    <p class="footer__note" data-i18n="note">Conceito de website não oficial — peça de portfólio por Henrique Roquete Cacao. Não afiliado à marca Enjoy joy!®. Moradas e horários são conteúdo de exemplo.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/textures.js"></script>
+<script src="js/liquid.js"></script>
+<script src="js/cup3d.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

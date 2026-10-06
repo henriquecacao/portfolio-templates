@@ -1,0 +1,17 @@
+{
+  "slug": "enjoy-joy",
+  "title": "Enjoy joy!",
+  "subtitle": "Açaí shop one-pager",
+  "description": "Purple-and-yellow one-pager for an açaí bar. Features a drag-to-spin photo-3D cup in custom WebGL, a liquid shader hero, a live order builder and a PT/EN switch.",
+  "category": "Food & drink",
+  "tags": ["WebGL", "Photo-3D", "GLSL shader", "Order builder", "PT/EN"],
+  "palette": ["#2B0B45", "#6A1FA8", "#C7A6F2", "#FFC72C"],
+  "fonts": ["Lilita One", "Nunito"],
+  "date": "2026-10-03",
+  "order": 1,
+  "featured": true,
+  "concept": true,
+  "conceptNote": "Unofficial concept for a real brand. Not affiliated.",
+  "noindex": true,
+  "thumbnail": "thumbnail.webp"
+}
