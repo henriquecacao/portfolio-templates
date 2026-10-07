@@ -1,6 +1,6 @@
 # Universe — graffiti series
 
-A school project: spray-paint paintings of planets and space. This page presents them as a scroll journey. A pixel-art spaceship flies down the page and docks beside each painting.
+Spray-paint paintings of planets and space, shown at my final-year art exhibition at CAISL. This page presents them as a scroll journey. A pixel-art spaceship flies down the page and docks beside each painting.
 
 **Concept:** Exploring graffiti painting as a medium, inspired by space and planets. The goal is to explore multiple techniques within the graffiti medium while representing the infinite and mysterious possibilities of space.
 

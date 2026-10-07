@@ -1,0 +1,30 @@
+{
+  "slug": "lumen",
+  "title": "Project Lumen",
+  "subtitle": "3D game concept · solo project",
+  "description": "A first-person 3D exploration game about the last robot guarding humanity's DNA. Character and labs modelled in Blender, a playable prototype in Unity, plus UI, poster and an AI-generated trailer.",
+  "section": "Portfolio",
+  "category": "Game design",
+  "tags": [
+    "Blender",
+    "Unity",
+    "Game design",
+    "UI",
+    "AI trailer"
+  ],
+  "palette": [
+    "#0E0D0B",
+    "#FFF27A",
+    "#F9D39A",
+    "#E8896A"
+  ],
+  "fonts": [
+    "Barlow Condensed",
+    "Barlow"
+  ],
+  "date": "2026-06-17",
+  "dateLabel": "IADE · 2026",
+  "cta": "View project ↗",
+  "order": 99,
+  "thumbnail": "thumbnail.webp"
+}

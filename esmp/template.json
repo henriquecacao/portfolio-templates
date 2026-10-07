@@ -1,0 +1,30 @@
+{
+  "slug": "esmp",
+  "title": "ESMP",
+  "subtitle": "Wayfinding system · team of 3",
+  "description": "A visual identity and wayfinding system for Escola Secundária Marquês de Pombal in Lisbon, built from the school's own azulejos: signage, pictograms, floor maps and a history wall.",
+  "section": "Portfolio",
+  "category": "Wayfinding",
+  "tags": [
+    "Visual identity",
+    "Wayfinding",
+    "Signage",
+    "Pictograms",
+    "Illustrator"
+  ],
+  "palette": [
+    "#0041F5",
+    "#F5C000",
+    "#FF7700",
+    "#0B0B0B"
+  ],
+  "fonts": [
+    "Archivo",
+    "Figtree"
+  ],
+  "date": "2023-11-20",
+  "dateLabel": "IADE · 2023",
+  "cta": "View project ↗",
+  "order": 101,
+  "thumbnail": "thumbnail.webp"
+}

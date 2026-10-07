@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Lumen — 3D game concept · Henrique Roquete Cação</title>
+  <meta name="description" content="Project Lumen: a first-person 3D exploration game concept about the last robot guarding humanity's DNA. Character and world modelling, UI, poster and an AI-assisted trailer. Solo project at IADE." />
+  <meta name="theme-color" content="#0E0D0B" />
+  <meta property="og:title" content="Project Lumen — 3D game concept" />
+  <meta property="og:description" content="The last robot on Earth, a dying lab, and one flask of human DNA." />
+  <meta property="og:image" content="thumbnail.webp" />
+  <link rel="icon" href="../favicon.ico" sizes="any" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <!-- HUD: the game's own interface, reused as page chrome -->
+  <div class="hud">
+    <div class="meter" aria-hidden="true">
+      <span>Light</span><span class="bar"><i id="light"></i></span><span class="pct" id="light-pct">0%</span>
+    </div>
+    <a class="back" href="../#work"><b>HRC</b><span>Portfolio</span></a>
+  </div>
+  <div class="inv" id="inv" aria-hidden="true">
+    <span data-tip="Headlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg></span>
+    <span data-tip="Torch arm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l7-7M11 13l2-2 3 3-2 2zM16 14c2-1 3-3 3-5 0-1.5-1-3-1-3s-1 2-3 2.5"/></svg></span>
+    <span data-tip="Wheels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 4v5.5M12 14.5V20M4 12h5.5M14.5 12H20"/></svg></span>
+    <span data-tip="DNA flask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v15a2 2 0 0 0 4 0V3"/><path d="M10 8c2 1 2 2 4 3M10 12c2 1 2 2 4 3"/></svg></span>
+  </div>
+
+  <main>
+    <!-- ============ HERO: move the pointer to shine Lumen's headlight ============ -->
+    <section class="hero" id="hero">
+      <img src="assets/render-front.webp" width="1600" height="900" alt="3D render of Lumen, a small dark robot with orange headlamps and wheels, lit in an empty lab" fetchpriority="high">
+      <div class="dark" id="dark"></div>
+      <div class="wrap">
+        <div>
+          <p class="eyebrow">3D game concept · Blender + Unity · Solo project</p>
+          <h1><img src="assets/logo-light.png" width="1197" height="682" alt="Project Lumen"></h1>
+          <p class="tag">The last robot on Earth, a collapsing underground lab, and one flask of human DNA.</p>
+        </div>
+        <p class="hint">Move to shine the light ◐</p>
+      </div>
+    </section>
+
+    <dl class="facts wrap">
+      <div><dt>Where</dt><dd>IADE · Integrated Project III</dd></div>
+      <div><dt>Role</dt><dd>Solo, end to end</dd></div>
+      <div><dt>When</dt><dd>2026</dd></div>
+      <div><dt>Tools</dt><dd>Blender · Unity · AI video</dd></div>
+    </dl>
+
+    <!-- ============ TRAILER ============ -->
+    <section class="ch trailer" id="trailer" data-unlock="0">
+      <div class="cone" aria-hidden="true"></div>
+      <div class="wrap split">
+        <div>
+          <p class="num">00 · Trailer</p>
+          <ul class="lines" id="lines" aria-label="Trailer taglines">
+            <li>Embark on this adventure</li>
+            <li>To find the answer</li>
+            <li>To save humanity</li>
+          </ul>
+          <div class="text" style="margin-top:30px">
+            <p>The trailer is the one part made with <strong>generative AI video</strong>: I directed it from my own designs and prompts, then edited it and added music and sound effects. Everything else, the character, the labs and the playable prototype, I built myself in <strong>Blender</strong> and <strong>Unity</strong>.</p>
+          </div>
+        </div>
+        <div class="phone reveal">
+          <video src="assets/trailer.mp4" poster="assets/trailer-poster.webp" controls playsinline preload="none" width="576" height="1024" aria-label="Project Lumen trailer, 30 seconds"></video>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STORY ============ -->
+    <section class="ch" id="story" data-unlock="0">
+      <div class="cone" aria-hidden="true"></div>
+      <div class="wrap">
+        <p class="num">01 · Story</p>
+        <h2 class="head">The year is 2172</h2>
+        <div class="text reveal">
+          <p>Humanity is gone. Not because of a meteor or an alien invasion, but because of its own neglect of the planet. In its last years, scientists moved everyone they considered "useful" into secret underground labs and started <strong>Project Lumen</strong>: a flask holding everything needed to bring human life back.</p>
+          <p>They sent a distress signal into space and waited. The resources ran out before an answer came, so they built an AI to guard the flask: <strong>Lumen</strong>, a small robot.</p>
+          <p>Decades later, a distant radio signal reaches the lab. It's the answer to that old call for help. Lumen's systems reboot. She is alone in an overgrown, collapsing lab, with one task: <strong>reach the flask and get it to the extraction point in time.</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MEET LUMEN ============ -->
+    <section class="ch" id="lumen" data-unlock="1">
+      <div class="cone" aria-hidden="true"></div>
+      <div class="wrap split">
+        <figure class="fig reveal">
+          <button type="button" data-full="assets/render-portrait.webp" aria-label="Enlarge: Lumen character render">
+            <img src="assets/render-portrait.webp" width="1076" height="1164" alt="Close 3D render of Lumen: a boxy dark body, a periscope head with two blue eyes under an orange lamp, claw arms and four rugged wheels" loading="lazy">
+          </button>
+          <figcaption>Character modelled and rendered in Blender.</figcaption>
+        </figure>
+        <div>
+          <p class="num">02 · Character</p>
+          <h2 class="head">Meet Lumen</h2>
+          <div class="text"><p>A compact robot built for utility in a post-apocalyptic world. You play as her, and the whole game is about bringing her back to full strength.</p></div>
+          <div class="specs">
+            <div class="spec reveal">
+              <h3>Headlights <span>3 → 5 m</span></h3>
+              <p>She starts with one working eye-light. Two upgrades add a second light and then LEDs, a metre of vision each.</p>
+              <div class="steps"><i class="base"></i><i class="base"></i><i class="base"></i><i class="up"></i><i class="up"></i></div>
+            </div>
+            <div class="spec reveal">
+              <h3>Wheels <span>60 → 100%</span></h3>
+              <p>Four of six wheels at the start. Each missing wheel you find adds 20% speed.</p>
+              <div class="steps"><i class="base"></i><i class="base"></i><i class="base"></i><i class="up"></i><i class="up"></i></div>
+            </div>
+            <div class="spec reveal">
+              <h3>Torch arm <span>Repair</span></h3>
+              <p>Broken when you wake up. Fixing it with spare parts unlocks every other upgrade and opens locked doors.</p>
+              <div class="steps"><i class="up"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE LABS ============ -->
+    <section class="ch" id="world" data-unlock="2">
+      <div class="cone" aria-hidden="true"></div>
+      <div class="wrap">
+        <p class="num">03 · World</p>
+        <h2 class="head">The labs</h2>
+        <div class="text reveal"><p>Modelled in Blender and assembled in Unity: worn-down laboratories where nature has started to take over and ceilings are caving in. Some machines still work, but light is extremely scarce, and so are the ways out.</p></div>
+        <div class="gallery g2">
+          <figure class="fig reveal"><button type="button" data-full="assets/render-room.webp" aria-label="Enlarge: Lumen alone in the lab"><img src="assets/render-room.webp" width="1600" height="900" alt="Lumen seen from above in a dim lab room lined with benches" loading="lazy"></button><figcaption>The spawn lab, where Lumen wakes up.</figcaption></figure>
+          <figure class="fig reveal"><button type="button" data-full="assets/render-flask.webp" aria-label="Enlarge: the DNA flask on its pedestal"><img src="assets/render-flask.webp" width="1600" height="900" alt="A glowing green flask on a yellow pedestal in a dark room" loading="lazy"></button><figcaption>The goal: the DNA flask, waiting in the dark.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GAMEPLAY + UI ============ -->
+    <section class="ch" id="ui" data-unlock="2">
+      <div class="cone" aria-hidden="true"></div>
+      <div class="wrap">
+        <p class="num">04 · Gameplay & interface</p>
+        <h2 class="head">Explore, don't fight</h2>
+        <div class="text reveal">
+          <p>A first-person, 3D exploration game with <strong>no combat</strong>. Puzzles test memory and patience. You manage battery light and torch gas, hunt for upgrades, and find audio tapes, photos and documents that tell what happened. It's made for players over 16 who enjoy slow, story-driven games.</p>
+        </div>
+        <div class="keys reveal">
+          <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</div>
+          <div><kbd>Scroll</kbd> switch arm</div>
+          <div><kbd>I</kbd> inventory</div>
+          <div><kbd>Space</kbd> <s>jump</s>, she can't</div>
+        </div>
+        <figure class="fig reveal" style="margin-top:40px"><button type="button" data-full="assets/ui-hud.webp" aria-label="Enlarge: in-game view"><img src="assets/ui-hud.webp" width="1600" height="900" alt="First-person view down a lab corridor with Lumen's claw arms, light and torch meters top left and four inventory slots" loading="lazy"></button><figcaption>In-game view: light and torch meters, Lumen's arms, inventory bar. (This page's HUD is borrowed from it.)</figcaption></figure>
+        <div class="gallery g4">
+          <figure class="fig sketch reveal"><button type="button" data-full="assets/sketch-menu.webp" aria-label="Enlarge: pause menu sketch"><img src="assets/sketch-menu.webp" width="930" height="676" alt="Pencil sketch of the pause menu with three buttons" loading="lazy"></button><figcaption>Pause menu sketch.</figcaption></figure>
+          <figure class="fig sketch reveal"><button type="button" data-full="assets/sketch-hud.webp" aria-label="Enlarge: in-game view sketch"><img src="assets/sketch-hud.webp" width="1000" height="705" alt="Pencil sketch of the first-person view with arms, meters and inventory" loading="lazy"></button><figcaption>In-game view sketch.</figcaption></figure>
+          <figure class="fig sketch reveal"><button type="button" data-full="assets/sketch-flask.webp" aria-label="Enlarge: DNA flask sketch"><img src="assets/sketch-flask.webp" width="903" height="645" alt="Coloured sketch of a corked test tube with a red and blue DNA helix" loading="lazy"></button><figcaption>Item: the DNA flask.</figcaption></figure>
+          <figure class="fig sketch reveal"><button type="button" data-full="assets/sketch-logo.webp" aria-label="Enlarge: logo sketch"><img src="assets/sketch-logo.webp" width="986" height="699" alt="Pencil sketch of the Project Lumen lettering" loading="lazy"></button><figcaption>First logo sketch.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ IDENTITY ============ -->
+    <section class="ch identity" id="identity" data-unlock="3">
+      <div class="cone" aria-hidden="true"></div>
+      <div class="wrap split">
+        <div>
+          <p class="num">05 · Identity</p>
+          <h2 class="head">One bulb of hope</h2>
+          <img class="logo reveal" src="assets/logo-light.png" width="1197" height="682" alt="Project Lumen logo: dark lettering lit by a single bulb's yellow cone" loading="lazy">
+          <div class="text reveal">
+            <p><strong>"Project"</strong> is the kind of word military programmes use for top-secret work, which fits the story. <strong>"Lumen"</strong> is Latin for light, and also the unit for measuring brightness.</p>
+            <p>The logo is dark lettering lit by a single bulb. It's lonely, but the one light is enough to give hope, or at least make you curious about where it leads.</p>
+          </div>
+        </div>
+        <figure class="fig poster reveal"><button type="button" data-full="assets/poster.webp" aria-label="Enlarge: game poster"><img src="assets/poster.webp" width="900" height="1600" alt="Game poster: Lumen rolling along a curved corridor with salmon and pale blue light strips, logo bottom left" loading="lazy"></button><figcaption>Game poster.</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- ============ CREDITS ============ -->
+    <section class="credits" data-unlock="3">
+      <div class="wrap split">
+        <div>
+          <p class="eyebrow">Deliverables</p>
+          <ul>
+            <li>Concept book: story, gameplay, specs, audience</li>
+            <li>3D character and environment models and renders (Blender)</li>
+            <li>Playable prototype (Unity)</li>
+            <li>UI sketches and in-game interface</li>
+            <li>Logo and game poster</li>
+            <li>AI-generated trailer, edited with music and sound</li>
+            <li>Narrated presentation defending the design</li>
+          </ul>
+        </div>
+        <a class="next" href="../esmp/"><small>Next project</small><strong>ESMP wayfinding →</strong></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><span>© Henrique Roquete Cação</span><span>Solo project · IADE, Universidade Europeia</span></div>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Image viewer">
+    <button class="lb-btn lb-close" type="button" data-lb="close" aria-label="Close">×</button>
+    <button class="lb-btn lb-prev" type="button" data-lb="prev" aria-label="Previous image">‹</button>
+    <button class="lb-btn lb-next" type="button" data-lb="next" aria-label="Next image">›</button>
+    <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+  </dialog>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
