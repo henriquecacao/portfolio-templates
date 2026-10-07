@@ -1,0 +1,16 @@
+{
+  "slug": "universe",
+  "title": "Universe",
+  "subtitle": "Graffiti painting series · scroll journey",
+  "description": "A school series of spray-paint paintings about space and planets. Scroll, and a pixel spaceship flies from painting to painting across an animated starfield.",
+  "section": "School Work",
+  "category": "Painting",
+  "tags": ["Spray paint", "Graffiti", "Scroll animation", "Pixel art", "Canvas"],
+  "palette": ["#8E5BE8", "#FF5A36", "#57D13B", "#4FC3D1"],
+  "fonts": ["Pixelify Sans", "Space Grotesk"],
+  "date": "2026-10-07",
+  "dateLabel": "School project",
+  "cta": "Launch ↗",
+  "order": 100,
+  "thumbnail": "thumbnail.webp"
+}

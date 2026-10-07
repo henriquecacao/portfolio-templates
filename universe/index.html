@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Universe — graffiti series by Henrique Roquete Cação</title>
+  <meta name="description" content="Universe: a series of spray-paint paintings of planets and space by Henrique Roquete Cação, shown as a scroll journey with a pixel spaceship." />
+  <meta name="theme-color" content="#05060B" />
+  <meta property="og:title" content="Universe — graffiti series" />
+  <meta property="og:description" content="Spray-paint paintings of planets, explored by a pixel spaceship as you scroll." />
+  <meta property="og:image" content="thumbnail.webp" />
+  <link rel="icon" href="../favicon.ico" sizes="any" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.className = 'js';</script>
+</head>
+<body>
+  <!-- background: pixel starfield (canvas) + colour-shifting nebula + scanlines -->
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="nebula" aria-hidden="true"></div>
+  <div class="scan" aria-hidden="true"></div>
+
+  <!-- HUD: back to the portfolio, current stop, progress rail -->
+  <header class="hud">
+    <div class="hud__bar">
+      <a class="back" href="../#work"><b>HRC</b><span>← Portfolio</span></a>
+      <p class="readout" aria-live="polite"><i></i><span class="title">Universe</span><span class="num" id="readout">Launch</span></p>
+    </div>
+    <div class="rail" id="rail" aria-hidden="true"></div>
+  </header>
+
+  <main class="flight" id="flight">
+    <!-- flight path (drawn by js/main.js from the painting positions) -->
+    <svg class="trail" id="trail" aria-hidden="true">
+      <defs><clipPath id="done-clip"><rect id="done-rect" x="-2000" y="0" width="6000" height="0" /></clipPath></defs>
+      <path id="path-all" /><path id="path-done" class="done" clip-path="url(#done-clip)" />
+    </svg>
+
+    <!-- the ship: a 16×20 pixel sprite, built from a text map in js/main.js -->
+    <div class="ship idle" id="ship" aria-hidden="true"></div>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="wrap">
+        <span class="chip">School project · Graffiti series</span>
+        <h1>Universe</h1>
+        <p class="sub">Nine spray-paint paintings of planets and the space around them. Scroll, and the ship flies you from one to the next.</p>
+
+        <div class="brief pframe">
+          <p class="label"><span>▶ Concept</span><span>Transmission 01</span></p>
+          <p>Exploring graffiti painting as a medium, inspired by space and planets. The goal is to explore multiple techniques within the graffiti medium while representing the infinite and mysterious possibilities of space.</p>
+        </div>
+
+        <div class="launch">
+          <span class="label">▼ Scroll to launch ▼</span>
+          <div class="pad" id="pad" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE PAINTINGS ============ -->
+    <section aria-label="The paintings">
+      <ol class="stops wrap" id="stops">
+        <li class="stop" data-accent="#8E5BE8" data-accent2="#C9B6F2" id="n01">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-01.webp" aria-label="View painting 1 full size">
+              <img src="assets/art/universe-01-sm.webp" srcset="assets/art/universe-01-sm.webp 800w, assets/art/universe-01.webp 1600w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="1600" height="1031" alt="Spray-paint painting of a pale lilac planet with violet surface textures, glowing purple against a black starfield." loading="eager" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº01<small>/ 09</small></p>
+            <p class="coords label">RA 04h 12m · DEC +18°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#8E5BE8"></i><i style="background:#C9B6F2"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="0">⤢ Full size</button>
+          </div>
+        </li>
+        <li class="stop stop--r" data-accent="#FF5A36" data-accent2="#FFD23F" id="n02">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-02.webp" aria-label="View painting 2 full size">
+              <img src="assets/art/universe-02-sm.webp" srcset="assets/art/universe-02-sm.webp 488w, assets/art/universe-02.webp 975w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="975" height="1600" alt="Spray-paint painting of a white planet with red, orange and yellow textures, wrapped in a fiery red and yellow glow." loading="lazy" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº02<small>/ 09</small></p>
+            <p class="coords label">RA 07h 51m · DEC −02°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#FF5A36"></i><i style="background:#FFD23F"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="1">⤢ Full size</button>
+          </div>
+        </li>
+        <li class="stop" data-accent="#57D13B" data-accent2="#E3F5DD" id="n03">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-03.webp" aria-label="View painting 3 full size">
+              <img src="assets/art/universe-03-sm.webp" srcset="assets/art/universe-03-sm.webp 546w, assets/art/universe-03.webp 1093w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="1093" height="1600" alt="Spray-paint painting of a white and green planet with a green aurora sweeping across a black sky." loading="lazy" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº03<small>/ 09</small></p>
+            <p class="coords label">RA 10h 06m · DEC +44°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#57D13B"></i><i style="background:#E3F5DD"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="2">⤢ Full size</button>
+          </div>
+        </li>
+        <li class="stop stop--r" data-accent="#6FA8DC" data-accent2="#DCEBFA" id="n04">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-04.webp" aria-label="View painting 4 full size">
+              <img src="assets/art/universe-04-sm.webp" srcset="assets/art/universe-04-sm.webp 800w, assets/art/universe-04.webp 1600w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="1600" height="1074" alt="Spray-paint painting of an icy blue planet half in shadow, with a pale blue haze and white star clusters." loading="lazy" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº04<small>/ 09</small></p>
+            <p class="coords label">RA 13h 29m · DEC −31°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#6FA8DC"></i><i style="background:#DCEBFA"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="3">⤢ Full size</button>
+          </div>
+        </li>
+        <li class="stop" data-accent="#62B84A" data-accent2="#B8E6A8" id="n05">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-05.webp" aria-label="View painting 5 full size">
+              <img src="assets/art/universe-05-sm.webp" srcset="assets/art/universe-05-sm.webp 602w, assets/art/universe-05.webp 1205w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="1205" height="1600" alt="Spray-paint painting on canvas of a green-textured planet low in the frame, under a green-tinted sky full of stars." loading="lazy" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº05<small>/ 09</small></p>
+            <p class="coords label">RA 15h 47m · DEC +09°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#62B84A"></i><i style="background:#B8E6A8"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="4">⤢ Full size</button>
+          </div>
+        </li>
+        <li class="stop stop--r" data-accent="#C68A5C" data-accent2="#7A6FD6" id="n06">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-06.webp" aria-label="View painting 6 full size">
+              <img src="assets/art/universe-06-sm.webp" srcset="assets/art/universe-06-sm.webp 618w, assets/art/universe-06.webp 960w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="960" height="1242" alt="Spray-paint painting of two planets, one copper and one violet, under grey storm clouds with a white lightning bolt between them." loading="lazy" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº06<small>/ 09</small></p>
+            <p class="coords label">RA 18h 03m · DEC −57°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#C68A5C"></i><i style="background:#7A6FD6"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="5">⤢ Full size</button>
+          </div>
+        </li>
+        <li class="stop" data-accent="#4FC3D1" data-accent2="#A8DDE6" id="n07">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-07.webp" aria-label="View painting 7 full size">
+              <img src="assets/art/universe-07-sm.webp" srcset="assets/art/universe-07-sm.webp 600w, assets/art/universe-07.webp 1200w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="1200" height="1600" alt="Spray-paint painting of a blue-grey planet with turquoise highlights, set in a dense field of white stars." loading="lazy" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº07<small>/ 09</small></p>
+            <p class="coords label">RA 20h 38m · DEC +27°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#4FC3D1"></i><i style="background:#A8DDE6"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="6">⤢ Full size</button>
+          </div>
+        </li>
+        <li class="stop stop--r" data-accent="#E8432F" data-accent2="#F28A2E" id="n08">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-08.webp" aria-label="View painting 8 full size">
+              <img src="assets/art/universe-08-sm.webp" srcset="assets/art/universe-08-sm.webp 600w, assets/art/universe-08.webp 960w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="960" height="1280" alt="Spray-paint painting of a planet with red and orange textures, lit from behind, against a smoky red and black sky." loading="lazy" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº08<small>/ 09</small></p>
+            <p class="coords label">RA 22h 14m · DEC −12°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#E8432F"></i><i style="background:#F28A2E"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="7">⤢ Full size</button>
+          </div>
+        </li>
+        <li class="stop" data-accent="#7CCB6A" data-accent2="#D7F0CF" id="n09">
+          <figure class="art">
+            <button type="button" class="pframe" data-full="assets/art/universe-09.webp" aria-label="View painting 9 full size">
+              <img src="assets/art/universe-09-sm.webp" srcset="assets/art/universe-09-sm.webp 600w, assets/art/universe-09.webp 960w"
+                   sizes="(max-width: 860px) 90vw, 50vw" width="960" height="1280" alt="Spray-paint painting of two pale green planets stacked vertically, joined by a white trail of light." loading="lazy" decoding="async">
+            </button>
+          </figure>
+          <div class="cap">
+            <p class="no">Nº09<small>/ 09</small></p>
+            <p class="coords label">RA 23h 56m · DEC +63°</p>
+            <p class="medium">Spray paint</p>
+            <div class="swatches" aria-hidden="true"><i style="background:#7CCB6A"></i><i style="background:#D7F0CF"></i><i style="background:#05060B"></i></div>
+            <button type="button" class="zoom" data-open="8">⤢ Full size</button>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ FINALE: the exhibition ============ -->
+    <section class="finale" id="finale" data-accent="#FF5A36" data-accent2="#4FC3D1">
+      <div class="wrap">
+        <span class="chip">Mission complete</span>
+        <h2>The exhibition</h2>
+        <p>The whole series, hung together on one wall.</p>
+        <div class="dock" id="dock" aria-hidden="true"></div>
+        <figure class="wall">
+          <button type="button" class="pframe art-btn" data-full="assets/art/exhibition.webp" aria-label="View the exhibition photo full size">
+            <img src="assets/art/exhibition.webp" width="1024" height="768" loading="lazy" decoding="async"
+                 alt="The Universe series hung together on a white wall: spray-paint planet paintings in blue, red, copper, green, purple and grey.">
+          </button>
+          <figcaption class="label">Universe · exhibited</figcaption>
+        </figure>
+        <div class="ctas">
+          <a class="btn btn--fill" href="../#work">← Back to portfolio</a>
+          <button class="btn btn--line" type="button" id="again">Fly again ↑</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span class="label">© Henrique Roquete Cação</span>
+      <span class="label">Paintings: spray paint · Page: designed by me, built with AI</span>
+    </div>
+  </footer>
+
+  <!-- full-size viewer -->
+  <dialog class="lightbox" id="lightbox" aria-label="Painting viewer">
+    <button class="lb-btn lb-close" type="button" data-lb="close" aria-label="Close">×</button>
+    <button class="lb-btn lb-prev" type="button" data-lb="prev" aria-label="Previous painting">‹</button>
+    <button class="lb-btn lb-next" type="button" data-lb="next" aria-label="Next painting">›</button>
+    <figure><img id="lb-img" alt=""><figcaption class="label" id="lb-cap"></figcaption></figure>
+  </dialog>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
