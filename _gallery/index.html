@@ -103,7 +103,11 @@
     /* ---------- marquee of tools ---------- */
     .ticker { background: var(--orange); color: var(--black); overflow: hidden; white-space: nowrap; border-block: 2px solid var(--black); }
     .ticker div { display: inline-flex; gap: 34px; padding: 14px 0 14px 34px; animation: slide 30s linear infinite; font: 800 clamp(1.1rem, 2.4vw, 1.6rem) var(--f-sans); text-transform: uppercase; letter-spacing: -.01em; }
-    .ticker span::after { content: "✦"; margin-left: 34px; font-size: .7em; vertical-align: middle; }
+    .ticker span { display: inline-flex; align-items: center; gap: .4em; }
+    .ticker span::after { content: "✦"; margin-left: 34px; font-size: .7em; }
+    /* logo before each skill: brand marks in their own colours, generic skills as black line icons */
+    .ticker img { height: 1.05em; width: 1.05em; object-fit: contain; flex: none; }
+    .ticker img.tile { border-radius: .2em; }
     @keyframes slide { to { transform: translateX(-50%); } }
 
     /* ---------- sections ---------- */
@@ -153,7 +157,10 @@
     .tools__row { display: flex; gap: 10px; width: max-content; animation: slide 18s linear infinite; }
     .tools__row--rev { animation-direction: reverse; animation-duration: 22s; }
     .tools:hover .tools__row { animation-play-state: paused; }
-    .tools span { flex: none; font: 13px var(--f-mono); padding: 9px 14px; background: var(--panel-2); border-left: 3px solid var(--orange); white-space: nowrap; }
+    .tools span { flex: none; display: inline-flex; align-items: center; gap: 9px; font: 13px var(--f-mono); padding: 8px 14px 8px 11px; background: var(--panel-2); border-left: 3px solid var(--orange); white-space: nowrap; }
+    /* tool logos: official marks in full colour, sized to the cap height of the label */
+    .tools span img { width: 18px; height: 18px; object-fit: contain; flex: none; }
+    .tools span img.tile { border-radius: 4px; }   /* raster app icons get the same soft corners as the Adobe tiles */
 
     /* timeline */
     .timeline { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--orange); }
@@ -233,7 +240,15 @@
     </section>
 
     <div class="ticker" aria-hidden="true"><div id="ticker">
-      <span>Figma</span><span>Illustrator</span><span>Photoshop</span><span>Canva</span><span>Kling AI</span><span>HeyGen</span><span>Claude</span><span>Generative AI</span><span>Web design</span>
+      <span><img src="assets/tools/figma.svg" alt="" width="24" height="24">Figma</span>
+      <span><img src="assets/tools/illustrator.svg" alt="" width="24" height="24">Illustrator</span>
+      <span><img src="assets/tools/photoshop.svg" alt="" width="24" height="24">Photoshop</span>
+      <span><img src="assets/tools/canva.webp" alt="" width="24" height="24">Canva</span>
+      <span><img src="assets/tools/kling.webp" alt="" width="24" height="24" class="tile">Kling AI</span>
+      <span><img src="assets/tools/heygen.svg" alt="" width="24" height="24">HeyGen</span>
+      <span><img src="assets/tools/claude.svg" alt="" width="24" height="24">Claude</span>
+      <span><img src="assets/tools/generative-ai.svg" alt="" width="24" height="24">Generative AI</span>
+      <span><img src="assets/tools/web-design.svg" alt="" width="24" height="24">Web design</span>
     </div></div>
 
     <!-- ============ TEMPLATES ============ -->
@@ -263,10 +278,11 @@
             </div>
             <div class="frame reveal">
               <h3>Tools</h3>
-              <!-- two rows scrolling in opposite directions; JS duplicates each row for a seamless loop -->
+              <!-- two rows scrolling in opposite directions; JS duplicates each row for a seamless loop.
+                   Logos live in assets/tools/ (alt="" because the name sits right next to them) -->
               <div class="tools" aria-label="Adobe Illustrator, Photoshop, Dreamweaver, Figma, Canva, Kling AI, HeyGen, Microsoft Office">
-                <div class="tools__row"><span>Adobe Illustrator</span><span>Photoshop</span><span>Dreamweaver</span><span>Figma</span></div>
-                <div class="tools__row tools__row--rev"><span>Canva</span><span>Kling AI</span><span>HeyGen</span><span>Microsoft Office</span></div>
+                <div class="tools__row"><span><img src="assets/tools/illustrator.svg" alt="" width="18" height="18">Adobe Illustrator</span><span><img src="assets/tools/photoshop.svg" alt="" width="18" height="18">Photoshop</span><span><img src="assets/tools/dreamweaver.svg" alt="" width="18" height="18">Dreamweaver</span><span><img src="assets/tools/figma.svg" alt="" width="18" height="18">Figma</span></div>
+                <div class="tools__row tools__row--rev"><span><img src="assets/tools/canva.webp" alt="" width="18" height="18">Canva</span><span><img src="assets/tools/kling.webp" alt="" width="18" height="18" class="tile">Kling AI</span><span><img src="assets/tools/heygen.svg" alt="" width="18" height="18">HeyGen</span><span><img src="assets/tools/office.svg" alt="" width="18" height="18">Microsoft Office</span></div>
               </div>
             </div>
           </div>
