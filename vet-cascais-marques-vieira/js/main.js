@@ -2,6 +2,7 @@
    Clínica Veterinária de Cascais · Dr. Marques Vieira
    Concept one-pager. Vanilla JS, no dependencies.
    Edit the data blocks at the top; the page builds itself from them.
+   All visible text lives in js/i18n.js (PT + EN).
    ========================================================= */
 (() => {
   'use strict';
@@ -27,9 +28,9 @@
     ],
     slotMinutes: 30
   };
-  const DAYS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
-  /* Line icons drawn on a 32×32 grid (stroke only, coloured by CSS) */
+  /* Line icons drawn on a 32×32 grid (stroke only, coloured by CSS).
+     Service names/texts come from i18n keys "svc.<icon>". */
   const ICON = {
     consulta: '<path d="M8 4v8a6 6 0 0 0 12 0V4M14 18v3a6 6 0 0 0 12 0v-2"/><circle cx="26" cy="16" r="3"/>',
     vacina: '<path d="M21 4l7 7M24.5 7.5L11 21H7v-4L20.5 3.5M7 25l-3 3M16 8l4 4M12.5 11.5l2.5 2.5M9 15l2.5 2.5"/>',
@@ -40,17 +41,15 @@
     chip: '<rect x="9" y="9" width="14" height="14" rx="2"/><path d="M13 4v5M19 4v5M13 23v5M19 23v5M4 13h5M4 19h5M23 13h5M23 19h5"/>',
     cama: '<path d="M4 7v20M28 27v-7H4M14 20v-6h9a5 5 0 0 1 5 5v1"/><circle cx="9" cy="16" r="2.5"/>'
   };
-
   const SERVICES = [
-    { icon: 'consulta', tone: 'cyan', name: 'Consultas', text: 'Exame completo, tempo para perguntas e um plano claro.' },
-    { icon: 'vacina', tone: 'mag', name: 'Vacinação', text: 'Planos para cachorros, gatinhos e adultos, incluindo a antirrábica.' },
-    { icon: 'cirurgia', tone: 'yel', name: 'Cirurgia', text: 'Esterilizações e cirurgia de tecidos moles, com anestesia monitorizada.' },
-    { icon: 'analises', tone: 'cyan', name: 'Análises', text: 'Hemograma e bioquímicas na clínica, com resultados no próprio dia.' },
-    { icon: 'imagem', tone: 'mag', name: 'Imagiologia', text: 'Ecografia e radiologia digital para diagnosticar sem demoras.' },
-    { icon: 'dentes', tone: 'yel', name: 'Saúde oral', text: 'Avaliação dentária, destartarização e extrações.' },
-    { icon: 'chip', tone: 'cyan', name: 'Microchip & SIAC', text: 'Identificação, registo e passaporte para viajar.' },
-    { icon: 'cama', tone: 'mag', name: 'Internamento', text: 'Acompanhamento pós-operatório e notícias à família.' }
+    { icon: 'consulta', tone: 'cyan' }, { icon: 'vacina', tone: 'mag' },
+    { icon: 'cirurgia', tone: 'yel' }, { icon: 'analises', tone: 'cyan' },
+    { icon: 'imagem', tone: 'mag' }, { icon: 'dentes', tone: 'yel' },
+    { icon: 'chip', tone: 'cyan' }, { icon: 'cama', tone: 'mag' }
   ];
+
+  /* Life stages by age (years). Dogs depend on size: larger dogs age faster. */
+  const SENIOR_FROM = { small: 10, medium: 8, large: 7, cat: 11 };
 
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -61,7 +60,40 @@
   const lisbonNow = () => new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Lisbon' }));
 
   /* ---------------------------------------------------------
-     2. Contact hooks
+     2. Language: PT default, remembered per visitor
+     --------------------------------------------------------- */
+  const STORE_KEY = 'cvc-lang';
+  let lang = 'pt';
+  try { const saved = localStorage.getItem(STORE_KEY); if (saved === 'en' || saved === 'pt') lang = saved; } catch (e) { /* storage blocked: stay PT */ }
+  const t = (key, ...args) => {
+    const v = (window.I18N[lang] || {})[key] ?? window.I18N.pt[key];
+    return typeof v === 'function' ? v(...args) : v;
+  };
+  const renderers = [];                       // dynamic parts re-render on language change
+  const onLang = fn => { renderers.push(fn); fn(); };
+
+  function applyStatic() {
+    document.documentElement.lang = lang === 'en' ? 'en' : 'pt-PT';
+    $$('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+    $$('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
+    $$('[data-i18n-content]').forEach(el => el.setAttribute('content', t(el.dataset.i18nContent)));
+    $$('[data-i18n-label]').forEach(el => {
+      el.dataset.label = t(el.dataset.i18nLabel);
+      const b = $('.ph__label b', el); if (b) b.textContent = el.dataset.label;
+      const img = $('img', el); if (img) img.alt = el.dataset.label;
+    });
+    $$('[data-lang-opt]').forEach(s => s.classList.toggle('is-on', s.dataset.langOpt === lang));
+  }
+  function setLang(next) {
+    lang = next;
+    try { localStorage.setItem(STORE_KEY, lang); } catch (e) { /* ignore */ }
+    applyStatic();
+    renderers.forEach(fn => fn());
+  }
+  $('[data-lang-toggle]').addEventListener('click', () => setLang(lang === 'pt' ? 'en' : 'pt'));
+
+  /* ---------------------------------------------------------
+     3. Contact hooks
      --------------------------------------------------------- */
   $$('[data-phone]').forEach(el => (el.textContent = CLINIC.phone));
   $$('[data-tel]').forEach(el => (el.href = 'tel:+351' + CLINIC.phone.replace(/\D/g, '')));
@@ -69,7 +101,7 @@
   $$('[data-maps]').forEach(el => (el.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CLINIC.maps)));
 
   /* ---------------------------------------------------------
-     3. Photo slots: <figure class="ph" data-photo="x.jpg" data-label="…">
+     4. Photo slots: <figure class="ph" data-photo="x.jpg" data-label="…">
      Tries .jpg/.webp/.png in assets/photos/; otherwise a labelled placeholder stays.
      --------------------------------------------------------- */
   const PAW = '<svg class="ph__icon" viewBox="0 0 48 48" fill="#222"><ellipse cx="24" cy="32" rx="10" ry="8"/><circle cx="11" cy="20" r="4.5"/><circle cx="19" cy="12" r="4.5"/><circle cx="29" cy="12" r="4.5"/><circle cx="37" cy="20" r="4.5"/></svg>';
@@ -80,71 +112,83 @@
     const base = file.replace(/\.(jpe?g|png|webp)$/i, '');
     const tries = [...new Set([file, base + '.webp', base + '.jpg', base + '.png'])];
     const img = new Image(); let i = 0;
-    img.alt = fig.dataset.label || ''; img.decoding = 'async';
-    img.onload = () => { fig.prepend(img); fig.classList.add('is-loaded'); };
+    img.decoding = 'async';
+    img.onload = () => { img.alt = fig.dataset.label || ''; fig.prepend(img); fig.classList.add('is-loaded'); };
     img.onerror = () => { if (++i < tries.length) img.src = 'assets/photos/' + tries[i]; };
     img.src = 'assets/photos/' + tries[0];
   });
 
+  // Translate the static page now that photo labels exist
+  applyStatic();
+
   /* ---------------------------------------------------------
-     4. Open / closed status + hours list
+     5. Open / closed status + hours list
      --------------------------------------------------------- */
+  const fmtDay = ranges => ranges.length ? ranges.map(r => r.join('–')).join(' · ') : t('hours.closed');
   function renderStatus() {
+    const days = t('days');
     const now = lisbonNow(), day = now.getDay(), mins = now.getHours() * 60 + now.getMinutes();
     const today = CLINIC.hours[day];
     const open = today.find(([a, b]) => mins >= toMin(a) && mins < toMin(b));
     let text;
-    if (open) text = `Aberto agora · até às ${open[1]}`;
+    if (open) text = t('status.open', open[1]);
     else {
       const later = today.find(([a]) => toMin(a) > mins);
-      if (later) text = `Fechado · abre às ${later[0]}`;
+      if (later) text = t('status.opensAt', later[0]);
       else {
         let d = (day + 1) % 7, k = 1;
         while (!CLINIC.hours[d].length && k < 7) { d = (d + 1) % 7; k++; }
-        text = `Fechado · abre ${k === 1 ? 'amanhã' : DAYS[d].toLowerCase()} às ${CLINIC.hours[d][0][0]}`;
+        text = k === 1 ? t('status.tomorrow', CLINIC.hours[d][0][0]) : t('status.opensDay', days[d], CLINIC.hours[d][0][0]);
       }
     }
     $$('[data-status]').forEach(el => (el.textContent = text));
     $$('[data-status-dot]').forEach(el => el.classList.toggle('is-open', !!open));
-    $$('[data-today]').forEach(el => (el.textContent = today.length ? today.map(r => r.join('–')).join(' · ') : 'Encerrado'));
+    $$('[data-today]').forEach(el => (el.textContent = fmtDay(today)));
     const dl = $('[data-hours]');
     if (dl) dl.innerHTML = [1, 2, 3, 4, 5, 6, 0].map(d =>
-      `<div class="${d === day ? 'is-today' : ''}"><dt>${DAYS[d]}</dt><dd>${CLINIC.hours[d].length ? CLINIC.hours[d].map(r => r.join('–')).join(' · ') : 'Encerrado'}</dd></div>`).join('');
+      `<div class="${d === day ? 'is-today' : ''}"><dt data-today-label="${t('hours.today')}">${days[d]}</dt><dd>${fmtDay(CLINIC.hours[d])}</dd></div>`).join('');
   }
-  renderStatus();
+  onLang(renderStatus);
   setInterval(renderStatus, 60_000);
 
   /* ---------------------------------------------------------
-     5. Services grid
+     6. Services grid
      --------------------------------------------------------- */
   const svc = $('[data-services]');
-  if (svc) svc.innerHTML = SERVICES.map(s => `
-    <li data-reveal><article class="svc__card" data-tone="${s.tone}">
-      <span class="svc__icon" aria-hidden="true"><svg viewBox="0 0 32 32">${ICON[s.icon]}</svg></span>
-      <h3>${s.name}</h3><p>${s.text}</p>
-    </article></li>`).join('');
+  let svcFirst = true;               // later re-renders (language switch) show cards immediately
+  onLang(() => {
+    if (!svc) return;
+    svc.innerHTML = SERVICES.map(s => {
+      const [name, text] = t('svc.' + s.icon);
+      return `<li data-reveal class="${svcFirst ? '' : 'is-in'}"><article class="svc__card" data-tone="${s.tone}">
+        <span class="svc__icon" aria-hidden="true"><svg viewBox="0 0 32 32">${ICON[s.icon]}</svg></span>
+        <h3>${name}</h3><p>${text}</p>
+      </article></li>`;
+    }).join('');
+    svcFirst = false;
+  });
 
   /* ---------------------------------------------------------
-     6. Pet age calculators (indicative, common vet rule of thumb:
-     year 1 ≈ 15, year 2 ≈ 24, then +4/5/6 per year by dog size; cats +4)
+     7. Age pickers: the animal's own age (1–40) + life stage.
+     For dogs the size changes when "senior" starts.
      --------------------------------------------------------- */
-  const PER_YEAR = { small: 4, medium: 5, large: 6, cat: 4 };
-  const humanAge = (y, rate) => y <= 1 ? 15 : y === 2 ? 24 : 24 + (y - 2) * rate;
   $$('[data-age]').forEach(box => {
     const input = $('[data-age-input]', box), out = $('[data-age-out]', box);
     const kind = box.dataset.age;
     const update = () => {
       const y = +input.value;
-      const rate = kind === 'cat' ? PER_YEAR.cat : PER_YEAR[$('input[name="porte"]:checked', box).value];
-      out.innerHTML = `≈ ${humanAge(y, rate)} anos<small>${y} ${y === 1 ? 'ano' : 'anos'} de ${kind === 'cat' ? 'gato' : 'cão'}</small>`;
+      const size = kind === 'cat' ? 'cat' : $('input[name="porte"]:checked', box).value;
+      const stage = y <= 1 ? 'young' : y >= SENIOR_FROM[size] ? 'senior' : 'adult';
+      out.innerHTML = `${t('age.years', y)}<small>${t('stage.' + stage)}</small>`;
+      input.setAttribute('aria-valuetext', t('age.years', y));
       input.style.setProperty('--p', ((y - input.min) / (input.max - input.min)) * 100 + '%');
     };
     box.addEventListener('input', update);
-    update();
+    onLang(update);
   });
 
   /* ---------------------------------------------------------
-     7. Photo strip arrows
+     8. Photo strip arrows
      --------------------------------------------------------- */
   const strip = $('[data-strip]');
   if (strip) {
@@ -154,14 +198,14 @@
   }
 
   /* ---------------------------------------------------------
-     8. Booking wizard
+     9. Booking wizard
      --------------------------------------------------------- */
   const wiz = $('[data-wiz]');
   if (wiz) {
     const steps = $$('[data-step]', wiz), dots = $$('[data-steps] li');
     const back = $('[data-back]', wiz), next = $('[data-next]', wiz), err = $('[data-err]', wiz);
     const daysEl = $('[data-days]', wiz), slotsEl = $('[data-slots]', wiz);
-    let cur = 0;
+    let cur = 0, dayIdx = 0, errIdx = -1, done = false;
 
     // Next 6 days the clinic is open (today included if slots remain)
     const now = lisbonNow();
@@ -180,30 +224,31 @@
     }
     // Pretend some slots are booked: a stable pseudo-random pattern per date
     const taken = (d, m) => ((d.getDate() * 31 + m / 30 * 7) % 5) === 0;
+    const dayLong = d => d.toLocaleDateString(t('locale'), { weekday: 'long', day: 'numeric', month: 'long' });
 
-    daysEl.innerHTML = openDays.map((o, i) => `
-      <button type="button" class="day" role="radio" aria-checked="false" data-day="${i}">
-        <span>${DAYS[o.d.getDay()].slice(0, 3)}</span><b>${o.d.getDate()}</b>
-        <span>${o.d.toLocaleDateString('pt-PT', { month: 'short' }).replace('.', '')}</span>
-      </button>`).join('');
-
-    const pickDay = i => {
-      $$('.day', daysEl).forEach(b => b.setAttribute('aria-checked', String(+b.dataset.day === i)));
-      const o = openDays[i];
-      wiz.dia.value = o.d.toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' });
-      wiz.hora.value = '';
-      slotsEl.innerHTML = o.slots.map(m =>
-        `<button type="button" class="slot" role="radio" aria-checked="false" data-m="${m}" ${taken(o.d, m) ? 'disabled aria-label="' + toHHMM(m) + ' ocupado"' : ''}>${toHHMM(m)}</button>`).join('');
+    const renderDays = () => {
+      daysEl.innerHTML = openDays.map((o, i) => `
+        <button type="button" class="day" role="radio" aria-checked="${i === dayIdx}" data-day="${i}">
+          <span>${t('days')[o.d.getDay()].slice(0, 3)}</span><b>${o.d.getDate()}</b>
+          <span>${o.d.toLocaleDateString(t('locale'), { month: 'short' }).replace('.', '')}</span>
+        </button>`).join('');
     };
+    const renderSlots = () => {
+      const o = openDays[dayIdx]; if (!o) return;
+      slotsEl.innerHTML = o.slots.map(m => {
+        const hhmm = toHHMM(m), isTaken = taken(o.d, m);
+        return `<button type="button" class="slot" role="radio" aria-checked="${wiz.hora.value === hhmm}" data-m="${m}" ${isTaken ? `disabled aria-label="${hhmm} ${t('wiz.taken')}"` : ''}>${hhmm}</button>`;
+      }).join('');
+      wiz.dia.value = dayLong(o.d);
+    };
+    const pickDay = i => { dayIdx = i; wiz.hora.value = ''; renderDays(); renderSlots(); };
     daysEl.addEventListener('click', e => { const b = e.target.closest('.day'); if (b) pickDay(+b.dataset.day); });
     slotsEl.addEventListener('click', e => {
       const b = e.target.closest('.slot'); if (!b || b.disabled) return;
       $$('.slot', slotsEl).forEach(x => x.setAttribute('aria-checked', String(x === b)));
-      wiz.hora.value = b.textContent; err.textContent = '';
+      wiz.hora.value = b.textContent; err.textContent = ''; errIdx = -1;
     });
-    if (openDays.length) pickDay(0);
 
-    const MSG = ['Escolha o animal e escreva o nome.', 'Escolha um motivo.', 'Escolha uma hora disponível.', 'Preencha o nome e um telemóvel válido.'];
     const valid = i => {
       let ok = true;
       $$('input', steps[i]).forEach(f => {
@@ -215,37 +260,49 @@
       if (i === 2 && (!wiz.dia.value || !wiz.hora.value)) ok = false;
       return ok;
     };
+    const summary = () => {
+      const d = Object.fromEntries(new FormData(wiz));
+      return t('wiz.summary', {
+        reason: t('reason.' + d.motivo), pet: d.pet, species: t('pet.' + d.especie).toLowerCase(),
+        day: dayLong(openDays[dayIdx].d), time: d.hora, tel: d.tel
+      });
+    };
+    const renderBar = () => {
+      next.textContent = cur === steps.length - 1 ? t('wiz.submit') : t('wiz.next');
+      err.textContent = errIdx >= 0 ? t('wiz.err')[errIdx] : '';
+      if (done) $('[data-summary]', wiz).textContent = summary();
+    };
     const show = i => {
-      cur = i;
+      cur = i; errIdx = -1;
       steps.forEach((s, k) => s.classList.toggle('is-on', k === i));
       dots.forEach((d, k) => { d.classList.toggle('is-on', k === i); d.classList.toggle('is-done', k < i); });
       back.disabled = i === 0;
-      next.textContent = i === steps.length - 1 ? 'Pedir marcação' : 'Continuar';
-      err.textContent = '';
+      renderBar();
       const first = $('input:not([type=hidden]), button', steps[i]);
       if (first && wiz.getBoundingClientRect().top < innerHeight) first.focus({ preventScroll: true });
     };
     next.addEventListener('click', () => {
-      if (!valid(cur)) { err.textContent = MSG[cur]; return; }
+      if (!valid(cur)) { errIdx = cur; renderBar(); return; }
       if (cur < steps.length - 1) return show(cur + 1);
-      const d = Object.fromEntries(new FormData(wiz));
-      $('[data-summary]', wiz).textContent =
-        `${d.motivo} para ${d.pet} (${d.especie.toLowerCase()}), ${d.dia} às ${d.hora}. Ligamos para ${d.tel} para confirmar.`;
+      done = true;
       steps.forEach(s => s.classList.remove('is-on'));
       dots.forEach(d => { d.classList.remove('is-on'); d.classList.add('is-done'); });
       $('[data-done]', wiz).hidden = false; wiz.classList.add('is-done');
+      renderBar();
     });
     back.addEventListener('click', () => cur > 0 && show(cur - 1));
-    wiz.addEventListener('input', e => { e.target.closest('.input')?.classList.remove('is-bad'); err.textContent = ''; });
+    wiz.addEventListener('input', e => { e.target.closest('.input')?.classList.remove('is-bad'); errIdx = -1; err.textContent = ''; });
     wiz.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); next.click(); } });
     $('[data-restart]', wiz).addEventListener('click', () => {
-      wiz.reset(); $('[data-done]', wiz).hidden = true; wiz.classList.remove('is-done');
-      if (openDays.length) pickDay(0); show(0);
+      wiz.reset(); done = false; $('[data-done]', wiz).hidden = true; wiz.classList.remove('is-done');
+      pickDay(0); show(0);
     });
+
+    onLang(() => { renderDays(); renderSlots(); renderBar(); });
   }
 
   /* ---------------------------------------------------------
-     9. Map: load only when near the viewport
+     10. Map: load only when near the viewport
      --------------------------------------------------------- */
   const map = $('[data-map]');
   if (map) {
@@ -258,13 +315,14 @@
   }
 
   /* ---------------------------------------------------------
-     10. Header, mobile menu, call button
+     11. Header, mobile menu, call button
      --------------------------------------------------------- */
   const head = $('[data-head]'), menu = $('[data-menu]'), burger = $('[data-burger]');
-  const setMenu = o => { menu.classList.toggle('is-open', o); burger.setAttribute('aria-expanded', String(o)); burger.setAttribute('aria-label', o ? 'Fechar menu' : 'Abrir menu'); };
+  const setMenu = o => { menu.classList.toggle('is-open', o); burger.setAttribute('aria-expanded', String(o)); burger.setAttribute('aria-label', t(o ? 'nav.close' : 'nav.open')); };
   burger.addEventListener('click', () => setMenu(!menu.classList.contains('is-open')));
   menu.addEventListener('click', e => e.target.closest('a') && setMenu(false));
   addEventListener('keydown', e => e.key === 'Escape' && setMenu(false));
+  onLang(() => setMenu(menu.classList.contains('is-open')));
   const fab = $('.fab'), hero = $('.hero');
   const onScroll = () => {
     head.classList.toggle('is-scrolled', scrollY > 10);
@@ -273,11 +331,12 @@
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
   /* ---------------------------------------------------------
-     11. Reveal on scroll
+     12. Reveal on scroll
      --------------------------------------------------------- */
   $$('.section__head, .pet__in, .clinic__copy, .contact__info').forEach(el => el.setAttribute('data-reveal', ''));
   const io = new IntersectionObserver(es => es.forEach(en => {
-    if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+    if (!en.isIntersecting) return;
+    en.target.classList.add('is-in'); io.unobserve(en.target);
   }), { threshold: .12 });
   $$('[data-reveal]').forEach((el, i) => {
     el.style.transitionDelay = (i % 4) * 70 + 'ms';

@@ -334,8 +334,7 @@
     const groups = document.getElementById('groups');
     const DEFAULT_SECTION = 'One-Pager Templates';
     const INTRO = {   // optional one-liner per section; others show a project count
-      'One-Pager Templates': 'Single-page websites, each one a standalone live site with readable code. New ones appear here automatically.',
-      'Portfolio': 'Design, art and 3D projects from my studies, each shown on a page built for it.'
+      'One-Pager Templates': 'Single-page websites, each one a standalone live site with readable code. New ones appear here automatically.'
     };
 
     function card(t, i) {
@@ -350,12 +349,12 @@
               <p class="desc">${esc(t.description)}</p>
               <div class="meta">
                 ${t.palette ? `<div class="palette">${t.palette.map(c => `<i style="background:${esc(c)}"></i>`).join('')}</div>` : '<span></span>'}
-                <span class="label">${esc(t.dateLabel || t.date)}</span>
+                <span class="label">${esc(t.date)}</span>
               </div>
               ${t.tags ? `<div class="tags">${t.tags.map(x => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
               ${t.concept ? `<p class="concept">⚑ ${esc(t.conceptNote || 'Unofficial concept')}</p>` : ''}
               <div class="links">
-                <a class="btn btn--fill" href="${esc(t.url)}">${esc(t.cta || 'Open live ↗')}</a>
+                <a class="btn btn--fill" href="${esc(t.url)}">Open live ↗</a>
                 ${t.source ? `<a class="btn btn--line" href="${esc(t.source)}">Code</a>` : ''}
               </div>
             </div>

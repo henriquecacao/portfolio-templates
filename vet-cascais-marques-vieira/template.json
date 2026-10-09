@@ -2,16 +2,29 @@
   "slug": "vet-cascais-marques-vieira",
   "title": "Clínica Veterinária de Cascais (brand edition)",
   "subtitle": "Vet clinic one-pager on the real identity",
-  "description": "Bold, logo-driven one-pager for a Cascais vet clinic. The emblem's cyan sky, magenta ground and triple ring shape the whole layout, with a dog/cat split, pet-age calculators and a four-step booking wizard with live time slots.",
+  "description": "Bold, logo-driven one-pager for a Cascais vet clinic, in Portuguese and English. The emblem's cyan sky, triple ring and magenta/yellow animals shape the layout, with dog and cat panels, age pickers with life stages and a four-step booking wizard with live time slots.",
   "category": "Health & local services",
-  "tags": ["Brand system", "SVG logo redraw", "Booking wizard", "Age calculator", "Live opening hours"],
-  "palette": ["#44C1D7", "#F70077", "#FFFF21", "#222222"],
-  "fonts": ["Roboto", "Roboto Mono"],
+  "tags": [
+    "Brand system",
+    "SVG logo redraw",
+    "PT/EN toggle",
+    "Booking wizard",
+    "Live opening hours"
+  ],
+  "palette": [
+    "#44C1D7",
+    "#F70077",
+    "#FFFF21",
+    "#222222"
+  ],
+  "fonts": [
+    "Roboto",
+    "Roboto Mono"
+  ],
   "date": "2026-10-06",
   "order": 3,
   "concept": true,
   "conceptNote": "Unofficial concept for a real business, using its existing logo. Not affiliated.",
   "noindex": true,
-  "thumbnail": "thumbnail.webp",
-  "draft": true
+  "thumbnail": "thumbnail.webp"
 }

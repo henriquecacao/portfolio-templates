@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Clínica Veterinária de Cascais · Dr. Marques Vieira</title>
-  <meta name="description" content="Clínica veterinária para cães e gatos em Cascais. Consultas, vacinação, cirurgia e diagnóstico na Av. 25 de Abril." />
+  <meta name="description" content="Clínica veterinária para cães e gatos em Cascais. Consultas, vacinação, cirurgia e diagnóstico na Av. 25 de Abril." data-i18n-content="meta.desc" />
   <meta name="theme-color" content="#44C1D7" />
   <link rel="icon" type="image/svg+xml" href="assets/logo-emblem.svg" />
 
@@ -16,24 +16,34 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+  <!--
+    Translations: every element with data-i18n="key" gets its content from
+    js/i18n.js (PT + EN). data-i18n-aria / -alt / -label / -content do the same
+    for aria-label, alt, photo-slot labels and meta content. The PT text below
+    is the default and matches the PT dictionary.
+  -->
+  <a class="skip" href="#conteudo" data-i18n="skip">Saltar para o conteúdo</a>
 
   <!-- ============ Header: the clinic's real lockup ============ -->
   <header class="head" data-head>
     <div class="wrap head__in">
-      <a class="lockup" href="#topo" aria-label="Clínica Veterinária de Cascais, Dr. Marques Vieira — início">
+      <a class="lockup" href="#topo" data-i18n-aria="nav.home" aria-label="Clínica Veterinária de Cascais, Dr. Marques Vieira — início">
         <img class="lockup__emblem" src="assets/logo-emblem.svg" alt="" width="56" height="56" />
         <span class="lockup__text">
           <span class="lockup__l1">Clínica Veterinária de Cascais</span>
           <span class="lockup__l2">Dr. Marques Vieira</span>
         </span>
       </a>
-      <nav class="menu" aria-label="Principal" data-menu>
-        <a href="#caes-gatos">Cães &amp; gatos</a>
-        <a href="#servicos">Serviços</a>
-        <a href="#clinica">A clínica</a>
-        <a href="#contactos">Contactos</a>
-        <a href="#marcar" class="btn btn--mag">Marcar consulta</a>
+      <nav class="menu" data-i18n-aria="nav.label" aria-label="Principal" data-menu>
+        <a href="#caes-gatos" data-i18n="nav.pets">Cães e Gatos</a>
+        <a href="#servicos" data-i18n="nav.services">Serviços</a>
+        <a href="#clinica" data-i18n="nav.about">Sobre Nós</a>
+        <a href="#contactos" data-i18n="nav.contacts">Contactos</a>
+        <a href="#marcar" class="btn btn--mag" data-i18n="cta.book">Marcar consulta</a>
+        <!-- Language toggle (brand yellow): shows both, highlights the active one -->
+        <button class="lang" type="button" data-lang-toggle aria-label="Mudar para inglês" data-i18n-aria="lang.switch">
+          <span data-lang-opt="pt">PT</span><span data-lang-opt="en">EN</span>
+        </button>
       </nav>
       <button class="burger" aria-expanded="false" aria-label="Abrir menu" data-burger><span></span><span></span><span></span></button>
     </div>
@@ -41,70 +51,70 @@
 
   <main id="conteudo">
 
-    <!-- ============ Hero: cyan "sky" + magenta "ground", like the emblem ============ -->
+    <!-- ============ Hero: cyan "sky" like the emblem ============ -->
     <section class="hero" id="topo">
       <div class="wrap hero__grid">
         <div class="hero__copy">
           <p class="pill"><span class="pill__dot" data-status-dot></span><span data-status>—</span></p>
-          <h1 class="title title--xl">
+          <h1 class="title title--xl" data-i18n="hero.title">
             <span class="title__light">Cuidamos de</span>
             <span class="title__bold"><mark class="hl hl--mag">cães</mark> e <mark class="hl hl--yel">gatos</mark></span>
             <span class="title__light">em Cascais</span>
           </h1>
-          <p class="hero__lede">
-            Consultas, vacinação, cirurgia e diagnóstico, numa clínica de bairro
+          <p class="hero__lede" data-i18n="hero.lede">
+            Consultas, vacinação, cirurgia e diagnóstico, num espaço acolhedor
             onde cada animal é conhecido pelo nome.
           </p>
           <div class="hero__cta">
-            <a href="#marcar" class="btn btn--mag btn--lg">Marcar consulta</a>
-            <a data-tel class="btn btn--ink btn--lg">Ligar <span data-phone></span></a>
+            <a href="#marcar" class="btn btn--mag btn--lg" data-i18n="cta.book">Marcar consulta</a>
+            <a data-tel class="btn btn--ink btn--lg"><span data-i18n="cta.call">Ligar</span> <span data-phone></span></a>
           </div>
         </div>
 
         <!-- Circle photo inside the emblem's triple ring -->
         <div class="hero__visual" aria-hidden="true">
           <div class="rings"><span></span><span></span><span></span></div>
-          <figure class="ph ph--circle hero__photo" data-photo="hero.jpg" data-label="Foto principal · cão e gato" data-ratio="1/1"></figure>
-          <span class="badge badge--mag" data-orbit="0">Cães</span>
-          <span class="badge badge--yel" data-orbit="1">Gatos</span>
+          <figure class="ph ph--circle hero__photo" data-photo="hero.jpg" data-label="Foto principal · cão e gato" data-i18n-label="ph.hero" data-ratio="1/1"></figure>
+          <span class="badge badge--mag" data-i18n="badge.dogs">Cães</span>
+          <span class="badge badge--yel" data-i18n="badge.cats">Gatos</span>
         </div>
       </div>
 
-      <!-- Magenta base band = the ground line of the emblem -->
+      <!-- Info band: white with dark text for legibility -->
       <div class="ground">
         <div class="wrap ground__grid">
-          <div><span class="label">Morada</span><span data-address></span></div>
-          <div><span class="label">Hoje</span><span data-today></span></div>
-          <div><span class="label">Telefone</span><a data-tel><span data-phone></span></a></div>
+          <div><span class="label" data-i18n="band.address">Morada</span><span data-address></span></div>
+          <div><span class="label" data-i18n="band.today">Hoje</span><span data-today></span></div>
+          <div><span class="label" data-i18n="band.phone">Telefone</span><a data-tel><span data-phone></span></a></div>
         </div>
       </div>
     </section>
 
-    <!-- ============ Dogs / Cats split ============ -->
+    <!-- ============ Dogs / Cats split (soft tints of the brand magenta + yellow) ============ -->
     <section class="split" id="caes-gatos">
       <article class="pet pet--dog">
         <div class="pet__in">
-          <figure class="ph ph--circle pet__photo" data-photo="cao.jpg" data-label="Cão" data-ratio="1/1"></figure>
-          <h2 class="title"><span class="title__light">Para o seu</span><span class="title__bold">cão</span></h2>
-          <ul class="ticks">
+          <figure class="ph ph--circle pet__photo" data-photo="cao.jpg" data-label="Cão" data-i18n-label="ph.dog" data-ratio="1/1"></figure>
+          <h2 class="title" data-i18n="dog.title"><span class="title__light">Para o seu</span><span class="title__bold"><mark class="hl hl--mag">cão</mark></span></h2>
+          <ul class="ticks" data-i18n="dog.list">
             <li>Vacinação e antirrábica obrigatória</li>
             <li>Microchip, registo SIAC e passaporte</li>
             <li>Desparasitação interna e externa</li>
             <li>Check-up anual e controlo de peso</li>
           </ul>
 
-          <!-- Age calculator -->
+          <!-- Age picker: the animal's own age + size → life stage -->
           <div class="age" data-age="dog">
-            <p class="age__q">Que idade tem em anos humanos?</p>
+            <p class="age__q" data-i18n="dog.ageQ">Que idade tem o seu cão?</p>
             <div class="age__row">
-              <label class="sr" for="age-dog">Idade do cão</label>
-              <input id="age-dog" type="range" min="1" max="16" value="4" data-age-input />
+              <label class="sr" for="age-dog" data-i18n="dog.ageLabel">Idade do cão</label>
+              <input id="age-dog" type="range" min="1" max="40" value="4" data-age-input />
               <output class="age__out" data-age-out>—</output>
             </div>
-            <div class="seg seg--light" role="radiogroup" aria-label="Porte">
-              <label><input type="radio" name="porte" value="small" /><span>Pequeno</span></label>
-              <label><input type="radio" name="porte" value="medium" checked /><span>Médio</span></label>
-              <label><input type="radio" name="porte" value="large" /><span>Grande</span></label>
+            <div class="seg" role="radiogroup" data-i18n-aria="dog.size" aria-label="Porte">
+              <label><input type="radio" name="porte" value="small" /><span data-i18n="size.small">Pequeno</span></label>
+              <label><input type="radio" name="porte" value="medium" checked /><span data-i18n="size.medium">Médio</span></label>
+              <label><input type="radio" name="porte" value="large" /><span data-i18n="size.large">Grande</span></label>
             </div>
           </div>
         </div>
@@ -112,9 +122,9 @@
 
       <article class="pet pet--cat">
         <div class="pet__in">
-          <figure class="ph ph--circle pet__photo" data-photo="gato.jpg" data-label="Gato" data-ratio="1/1"></figure>
-          <h2 class="title"><span class="title__light">Para o seu</span><span class="title__bold">gato</span></h2>
-          <ul class="ticks">
+          <figure class="ph ph--circle pet__photo" data-photo="gato.jpg" data-label="Gato" data-i18n-label="ph.cat" data-ratio="1/1"></figure>
+          <h2 class="title" data-i18n="cat.title"><span class="title__light">Para o seu</span><span class="title__bold"><mark class="hl hl--yel">gato</mark></span></h2>
+          <ul class="ticks" data-i18n="cat.list">
             <li>Vacinação adaptada a gato de casa ou de rua</li>
             <li>Testes de leucemia e imunodeficiência felina</li>
             <li>Esterilização e acompanhamento</li>
@@ -122,13 +132,12 @@
           </ul>
 
           <div class="age" data-age="cat">
-            <p class="age__q">Que idade tem em anos humanos?</p>
+            <p class="age__q" data-i18n="cat.ageQ">Que idade tem o seu gato?</p>
             <div class="age__row">
-              <label class="sr" for="age-cat">Idade do gato</label>
-              <input id="age-cat" type="range" min="1" max="20" value="4" data-age-input />
+              <label class="sr" for="age-cat" data-i18n="cat.ageLabel">Idade do gato</label>
+              <input id="age-cat" type="range" min="1" max="40" value="4" data-age-input />
               <output class="age__out" data-age-out>—</output>
             </div>
-            <p class="age__note">Estimativa indicativa.</p>
           </div>
         </div>
       </article>
@@ -138,14 +147,14 @@
     <section class="section services" id="servicos">
       <div class="wrap">
         <header class="section__head">
-          <h2 class="title"><span class="title__light">O que</span><span class="title__bold">fazemos</span></h2>
-          <p>Da primeira vacina ao check-up de um animal sénior, tudo na mesma clínica e com a mesma equipa.</p>
+          <h2 class="title" data-i18n="svc.title"><span class="title__light">O que</span><span class="title__bold">fazemos</span></h2>
+          <p data-i18n="svc.intro">Da primeira vacina ao check-up de um animal sénior, tudo na mesma clínica e com a mesma equipa.</p>
         </header>
         <ul class="svc" data-services></ul>
       </div>
     </section>
 
-    <!-- ============ Clinic ============ -->
+    <!-- ============ About us ============ -->
     <section class="section clinic" id="clinica">
       <div class="wrap clinic__grid">
         <div class="clinic__photo">
@@ -154,12 +163,12 @@
         </div>
         <div class="clinic__copy">
           <h2 class="title"><span class="title__light">Dr. Marques</span><span class="title__bold">Vieira</span></h2>
-          <p class="clinic__role">Diretor clínico</p>
-          <p>
+          <p class="clinic__role" data-i18n="about.role">Diretor clínico</p>
+          <p data-i18n="about.p1">
             Na Avenida 25 de Abril, a clínica do Dr. Marques Vieira acompanha os cães e gatos
             de Cascais com a proximidade de sempre: tempo para ouvir, explicar e decidir em conjunto.
           </p>
-          <p>
+          <p data-i18n="about.p2">
             Análises, ecografia e radiologia são feitas na própria clínica, para que o
             diagnóstico seja rápido e o tratamento comece cedo.
           </p>
@@ -167,16 +176,16 @@
       </div>
 
       <div class="wrap">
-        <div class="strip" data-strip tabindex="0" aria-label="Fotografias da clínica">
-          <figure class="ph ph--card" data-photo="espaco-1.jpg" data-label="Receção" data-ratio="4/5"></figure>
-          <figure class="ph ph--card" data-photo="espaco-2.jpg" data-label="Consultório" data-ratio="4/5"></figure>
-          <figure class="ph ph--card" data-photo="espaco-3.jpg" data-label="Equipa" data-ratio="4/5"></figure>
-          <figure class="ph ph--card" data-photo="espaco-4.jpg" data-label="Fachada" data-ratio="4/5"></figure>
-          <figure class="ph ph--card" data-photo="espaco-5.jpg" data-label="Sala de espera" data-ratio="4/5"></figure>
+        <div class="strip" data-strip tabindex="0" data-i18n-aria="gallery.label" aria-label="Fotografias da clínica">
+          <figure class="ph ph--card" data-photo="espaco-1.jpg" data-label="Receção" data-i18n-label="ph.g1" data-ratio="4/5"></figure>
+          <figure class="ph ph--card" data-photo="espaco-2.jpg" data-label="Consultório" data-i18n-label="ph.g2" data-ratio="4/5"></figure>
+          <figure class="ph ph--card" data-photo="espaco-3.jpg" data-label="Equipa" data-i18n-label="ph.g3" data-ratio="4/5"></figure>
+          <figure class="ph ph--card" data-photo="espaco-4.jpg" data-label="Fachada" data-i18n-label="ph.g4" data-ratio="4/5"></figure>
+          <figure class="ph ph--card" data-photo="espaco-5.jpg" data-label="Sala de espera" data-i18n-label="ph.g5" data-ratio="4/5"></figure>
         </div>
         <div class="strip__nav">
-          <button class="round" data-strip-prev aria-label="Fotografia anterior">←</button>
-          <button class="round" data-strip-next aria-label="Fotografia seguinte">→</button>
+          <button class="round" data-strip-prev data-i18n-aria="gallery.prev" aria-label="Fotografia anterior">←</button>
+          <button class="round" data-strip-next data-i18n-aria="gallery.next" aria-label="Fotografia seguinte">→</button>
         </div>
       </div>
     </section>
@@ -185,71 +194,68 @@
     <section class="section book" id="marcar">
       <div class="wrap book__grid">
         <header class="book__head">
-          <h2 class="title title--light-on-dark"><span class="title__light">Marcar</span><span class="title__bold">consulta</span></h2>
-          <p>Quatro passos, menos de um minuto. Confirmamos por telefone.</p>
+          <h2 class="title" data-i18n="book.title"><span class="title__light">Marcar</span><span class="title__bold">consulta</span></h2>
+          <p data-i18n="book.intro">Quatro passos, menos de um minuto. Confirmamos por telefone.</p>
           <ol class="steps" data-steps>
-            <li class="is-on">Animal</li><li>Motivo</li><li>Dia e hora</li><li>Contacto</li>
+            <li class="is-on" data-i18n="step.1">Animal</li><li data-i18n="step.2">Motivo</li><li data-i18n="step.3">Dia e hora</li><li data-i18n="step.4">Contacto</li>
           </ol>
           <div class="urgent">
-            <span class="label">Urgência?</span>
-            <a data-tel class="urgent__tel">Ligue <span data-phone></span></a>
+            <span class="label" data-i18n="book.urgent">Urgência?</span>
+            <a data-tel class="urgent__tel"><span data-i18n="book.callNow">Ligue</span> <span data-phone></span></a>
           </div>
         </header>
 
+        <!-- Radio values are language-neutral codes; labels come from i18n -->
         <form class="wiz" data-wiz novalidate>
-          <!-- Step 1 -->
           <fieldset class="wiz__step is-on" data-step="0">
-            <legend>Quem vem à consulta?</legend>
+            <legend data-i18n="wiz.q1">Quem vem à consulta?</legend>
             <div class="choices choices--3">
-              <label class="choice choice--mag"><input type="radio" name="especie" value="Cão" required /><span><b>Cão</b></span></label>
-              <label class="choice choice--yel"><input type="radio" name="especie" value="Gato" /><span><b>Gato</b></span></label>
-              <label class="choice choice--cyan"><input type="radio" name="especie" value="Outro" /><span><b>Outro</b></span></label>
+              <label class="choice choice--mag"><input type="radio" name="especie" value="dog" required /><span><b data-i18n="pet.dog">Cão</b></span></label>
+              <label class="choice choice--yel"><input type="radio" name="especie" value="cat" /><span><b data-i18n="pet.cat">Gato</b></span></label>
+              <label class="choice choice--cyan"><input type="radio" name="especie" value="other" /><span><b data-i18n="pet.other">Outro</b></span></label>
             </div>
-            <label class="input"><span>Nome do animal</span><input name="pet" required autocomplete="off" /></label>
+            <label class="input"><span data-i18n="wiz.petName">Nome do animal</span><input name="pet" required autocomplete="off" /></label>
           </fieldset>
 
-          <!-- Step 2 -->
           <fieldset class="wiz__step" data-step="1">
-            <legend>Qual o motivo?</legend>
+            <legend data-i18n="wiz.q2">Qual o motivo?</legend>
             <div class="choices choices--2">
-              <label class="choice"><input type="radio" name="motivo" value="Consulta geral" required /><span>Consulta geral</span></label>
-              <label class="choice"><input type="radio" name="motivo" value="Vacinação" /><span>Vacinação</span></label>
-              <label class="choice"><input type="radio" name="motivo" value="Check-up anual" /><span>Check-up anual</span></label>
-              <label class="choice"><input type="radio" name="motivo" value="Esterilização" /><span>Esterilização</span></label>
-              <label class="choice"><input type="radio" name="motivo" value="Exames" /><span>Exames</span></label>
-              <label class="choice"><input type="radio" name="motivo" value="Outro" /><span>Outro</span></label>
+              <label class="choice"><input type="radio" name="motivo" value="general" required /><span data-i18n="reason.general">Consulta geral</span></label>
+              <label class="choice"><input type="radio" name="motivo" value="vaccine" /><span data-i18n="reason.vaccine">Vacinação</span></label>
+              <label class="choice"><input type="radio" name="motivo" value="checkup" /><span data-i18n="reason.checkup">Check-up anual</span></label>
+              <label class="choice"><input type="radio" name="motivo" value="spay" /><span data-i18n="reason.spay">Esterilização</span></label>
+              <label class="choice"><input type="radio" name="motivo" value="tests" /><span data-i18n="reason.tests">Exames</span></label>
+              <label class="choice"><input type="radio" name="motivo" value="other" /><span data-i18n="reason.other">Outro</span></label>
             </div>
           </fieldset>
 
           <!-- Step 3: slots generated from the opening hours -->
           <fieldset class="wiz__step" data-step="2">
-            <legend>Quando lhe dá jeito?</legend>
-            <div class="days" data-days role="radiogroup" aria-label="Dia"></div>
-            <div class="slots" data-slots role="radiogroup" aria-label="Hora"></div>
+            <legend data-i18n="wiz.q3">Quando lhe dá jeito?</legend>
+            <div class="days" data-days role="radiogroup" data-i18n-aria="wiz.day" aria-label="Dia"></div>
+            <div class="slots" data-slots role="radiogroup" data-i18n-aria="wiz.time" aria-label="Hora"></div>
             <input type="hidden" name="dia" required /><input type="hidden" name="hora" required />
           </fieldset>
 
-          <!-- Step 4 -->
           <fieldset class="wiz__step" data-step="3">
-            <legend>Como o contactamos?</legend>
-            <label class="input"><span>O seu nome</span><input name="nome" required autocomplete="name" /></label>
-            <label class="input"><span>Telemóvel</span><input name="tel" type="tel" inputmode="tel" required pattern="[0-9 +]{9,}" autocomplete="tel" /></label>
+            <legend data-i18n="wiz.q4">Como o contactamos?</legend>
+            <label class="input"><span data-i18n="wiz.name">O seu nome</span><input name="nome" required autocomplete="name" /></label>
+            <label class="input"><span data-i18n="wiz.phone">Telemóvel</span><input name="tel" type="tel" inputmode="tel" required pattern="[0-9 +]{9,}" autocomplete="tel" /></label>
           </fieldset>
 
-          <!-- Done -->
           <div class="wiz__done" data-done hidden>
             <img src="assets/logo-emblem.svg" alt="" width="72" height="72" />
-            <p class="title title--sm"><span class="title__light">Pedido</span><span class="title__bold">recebido</span></p>
+            <p class="title title--sm" data-i18n="wiz.doneTitle"><span class="title__light">Pedido</span><span class="title__bold">recebido</span></p>
             <p data-summary></p>
-            <button type="button" class="btn btn--ghost" data-restart>Fazer outro pedido</button>
+            <button type="button" class="btn btn--ghost" data-restart data-i18n="wiz.again">Fazer outro pedido</button>
           </div>
 
           <div class="wiz__bar" data-bar>
-            <button type="button" class="btn btn--ghost" data-back disabled>Voltar</button>
+            <button type="button" class="btn btn--ghost" data-back disabled data-i18n="wiz.back">Voltar</button>
             <p class="wiz__err" data-err aria-live="polite"></p>
             <button type="button" class="btn btn--mag" data-next>Continuar</button>
           </div>
-          <p class="wiz__note">Demonstração: nada é enviado.</p>
+          <p class="wiz__note" data-i18n="wiz.demo">Demonstração: nada é enviado.</p>
         </form>
       </div>
     </section>
@@ -258,14 +264,14 @@
     <section class="contact" id="contactos">
       <div class="wrap contact__grid">
         <div class="contact__info">
-          <h2 class="title"><span class="title__light">Onde</span><span class="title__bold">estamos</span></h2>
+          <h2 class="title" data-i18n="contact.title"><span class="title__light">Onde</span><span class="title__bold">estamos</span></h2>
           <address>
             <span data-address></span><br />
             <a data-tel><span data-phone></span></a>
           </address>
           <dl class="hours" data-hours></dl>
-          <p class="hours__note">Horário de exemplo. Confirme por telefone.</p>
-          <a class="btn btn--ink" data-maps target="_blank" rel="noopener">Como chegar ↗</a>
+          <p class="hours__note" data-i18n="contact.note">Horário de exemplo. Confirme por telefone.</p>
+          <a class="btn btn--ink" data-maps target="_blank" rel="noopener" data-i18n="contact.directions">Como chegar ↗</a>
         </div>
         <div class="contact__map">
           <iframe data-map title="Mapa da clínica" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -283,7 +289,7 @@
           <span class="lockup__l2">Dr. Marques Vieira</span>
         </span>
       </div>
-      <p class="foot__concept">
+      <p class="foot__concept" data-i18n="foot.concept">
         Conceito não oficial para portfólio · Henrique Roquete Cação · Sem afiliação com a clínica.
         Logótipo redesenhado em vetor a partir do original. Horários e textos são exemplos.
       </p>
@@ -291,10 +297,11 @@
   </footer>
 
   <!-- Phones: round call button styled like the emblem -->
-  <a class="fab" data-tel aria-label="Ligar para a clínica">
+  <a class="fab" data-tel data-i18n-aria="cta.callClinic" aria-label="Ligar para a clínica">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z" fill="currentColor"/></svg>
   </a>
 
+  <script src="js/i18n.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
