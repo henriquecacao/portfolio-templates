@@ -1,4 +1,4 @@
-# Clínica Veterinária de Cascais · Dr. Marques Vieira (brand edition)
+# Clínica Veterinária de Cascais – Dr. Marques Vieira
 
 Concept one-pager for a Cascais vet clinic, built on the clinic's **existing logo and colours**.
 Unofficial portfolio piece, not affiliated with the clinic. Hours and copy are sample content, and the phone number comes from public listings (they disagree, so confirm it).
