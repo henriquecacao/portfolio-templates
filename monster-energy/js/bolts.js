@@ -11,7 +11,7 @@
   'use strict';
   const B = {
     charge: 0,
-    color: '#95D600',
+    color: '#AEC90B',
     bolts: [], drops: [],
     pointer: null
   };

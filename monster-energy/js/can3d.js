@@ -32,8 +32,9 @@
   const VERT = `
     attribute vec3 aPos; attribute vec3 aNor; attribute vec2 aUV;
     uniform mat4 uModel, uView, uProj;
-    varying vec3 vN; varying vec3 vP; varying vec2 vUV;
+    varying vec3 vN; varying vec3 vP; varying vec2 vUV; varying vec3 vL;
     void main(){
+      vL = aPos;
       vec4 wp = uView * uModel * vec4(aPos, 1.0);
       vP = wp.xyz;
       vN = mat3(uView * uModel) * aNor;
@@ -43,8 +44,10 @@
 
   const FRAG = `
     precision highp float;
-    varying vec3 vN; varying vec3 vP; varying vec2 vUV;
+    varying vec3 vN; varying vec3 vP; varying vec2 vUV; varying vec3 vL;
     uniform sampler2D uTex; uniform vec3 uAccent; uniform float uGlow;
+    uniform float uPhoto;     // 1 = texture is a front-on product photo, 0 = a wrap-around label
+    uniform vec4 uBox;        // photo: can's left, top, width, height inside the image (0–1)
     // Fake studio: two tall strip lights left/right and a softbox above.
     float env(vec3 r){
       float right = smoothstep(.16, .0, abs(r.x - .55)) * smoothstep(-.6, .2, r.y);
@@ -60,7 +63,21 @@
       float spec = pow(max(dot(N, normalize(L + V)), 0.0), 70.0);
       float e = env(R);
       vec3 col;
-      if (vUV.y > ${LABEL_Y0.toFixed(3)} && vUV.y < ${LABEL_Y1.toFixed(3)}) {
+      // PHOTO MODE: project the product photo straight onto the can from the front.
+      // The back gets the same photo mirrored, so it reads correctly from behind;
+      // the two halves meet at the sides (the idle sway keeps that seam out of view).
+      vec4 ph = vec4(0.0);
+      if (uPhoto > .5) {
+        float sx = vL.z >= 0.0 ? vL.x : -vL.x;
+        vec2 puv = vec2(uBox.x + (.5 + .93 * sx / ${(2 * 0.33).toFixed(2)}) * uBox.z,   // .93 keeps samples off the soft transparent edge
+                        uBox.y + (1.0 - (vL.y + ${MID.toFixed(3)}) / 1.673) * uBox.w);
+        ph = texture2D(uTex, puv);
+      }
+      if (uPhoto > .5 && ph.a > .5) {
+        // the photo already carries its own studio lighting: keep it, add only a moving glint
+        vec3 c = pow(ph.rgb, vec3(2.2));
+        col = c * (.92 + .18 * diff) + spec * .3 + e * .04;
+      } else if (uPhoto < .5 && vUV.y > ${LABEL_Y0.toFixed(3)} && vUV.y < ${LABEL_Y1.toFixed(3)}) {
         // printed label: ink over metal, with a clear-coat sheen
         vec3 ink = texture2D(uTex, vec2(vUV.x, 1.0 - (vUV.y - ${LABEL_Y0.toFixed(3)}) / ${(LABEL_Y1 - LABEL_Y0).toFixed(3)})).rgb;
         ink = pow(ink, vec3(2.2));
@@ -143,7 +160,7 @@
       const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib);
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, MESH.idx, gl.STATIC_DRAW);
 
-      this.u = {}; ['uModel', 'uView', 'uProj', 'uTex', 'uAccent', 'uGlow'].forEach(k => this.u[k] = gl.getUniformLocation(p, k));
+      this.u = {}; ['uModel', 'uView', 'uProj', 'uTex', 'uAccent', 'uGlow', 'uPhoto', 'uBox'].forEach(k => this.u[k] = gl.getUniformLocation(p, k));
       this.tex = gl.createTexture();
       gl.enable(gl.DEPTH_TEST);
 
@@ -154,7 +171,9 @@
       if (opts.interactive) this.bindDrag();
     }
 
-    setFlavour(labelCanvas, accentHex, spin = true) {
+    // tex: a label canvas, or an <img> of a front-on can photo (pass box = where the can sits in it)
+    setFlavour(labelCanvas, accentHex, spin = true, box = null) {
+      this.photo = !!box; this.box = box || [0, 0, 1, 1];
       if (this.failed) return;
       const gl = this.gl;
       gl.bindTexture(gl.TEXTURE_2D, this.tex);
@@ -193,9 +212,18 @@
 
     // advance motion by dt seconds, then draw
     step(dt) {
+      this.t = (this.t || 0) + dt;
       if (!this.dragging) {
-        const idle = this.reduced ? 0 : .45 + this.charge * 9;    // spins up as it charges
-        this.vel += (idle - this.vel) * Math.min(1, dt * 2.2);    // ease back to idle speed
+        if (this.charge > .05 || Math.abs(this.vel) > 2.5) {
+          // charging (or just flicked): spin, faster the more it's charged
+          const idle = this.reduced ? 0 : this.charge * 9;
+          this.vel += (idle - this.vel) * Math.min(1, dt * 1.6);
+        } else {
+          // at rest: drift back to face the viewer and sway gently either side of the front
+          const TAU = Math.PI * 2;
+          const target = Math.round(this.angle / TAU) * TAU + (this.reduced ? 0 : Math.sin(this.t * .7) * .3);
+          this.vel += ((target - this.angle) * 3 - this.vel) * Math.min(1, dt * 3);
+        }
         this.angle += this.vel * dt;
       }
       this.popT = Math.min(1, this.popT + dt * 2.2);
@@ -228,6 +256,8 @@
       gl.uniformMatrix4fv(this.u.uProj, false, proj);
       gl.uniform3fv(this.u.uAccent, this.accent);
       gl.uniform1f(this.u.uGlow, this.charge);
+      gl.uniform1f(this.u.uPhoto, this.photo ? 1 : 0);
+      gl.uniform4fv(this.u.uBox, this.box || [0, 0, 1, 1]);
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.tex); gl.uniform1i(this.u.uTex, 0);
       gl.drawElements(gl.TRIANGLES, MESH.idx.length, gl.UNSIGNED_SHORT, 0);
     }

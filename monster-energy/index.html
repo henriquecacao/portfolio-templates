@@ -6,7 +6,7 @@
   <title>Monster Energy, concept redesign (unofficial)</title>
   <meta name="description" content="Unofficial concept website for Monster Energy, made as a student portfolio piece. Not affiliated with or endorsed by Monster Energy Company." />
   <meta name="theme-color" content="#000000" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/favicon.png" type="image/png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,8 +26,8 @@
   </div>
 
   <header class="nav" id="top">
-    <a class="wordmark" href="#top" aria-label="Monster Energy concept, back to top">
-      <span class="wordmark__big">Monster</span><span class="wordmark__small">Energy</span>
+    <a class="wordmark" href="#top">
+      <img class="wordmark__claw" src="assets/brand/monster-claw.png" alt="Monster Energy (concept), back to top" width="919" height="1250" />
     </a>
     <nav aria-label="Sections">
       <ul class="nav__links">
@@ -47,12 +47,9 @@
       <div class="hero__flash" id="flash" aria-hidden="true"></div>
 
       <div class="hero__copy">
-        <h1 class="hero__title glitch" id="hero-title" data-text="Born loud.">Born loud.</h1>
-        <p class="hero__lede">Built for the riders, skaters and late shifts. Pick a can, then hold the button to crack it open.</p>
+        <h1 class="hero__title glitch" id="hero-title" data-text="Unleash the beast.">Unleash the beast.</h1>
+        <p class="hero__lede">Built for the riders, skaters and late shifts. Spin the wheel to pick a can, then hold the button to crack it open.</p>
 
-        <div class="flavours" role="radiogroup" aria-label="Choose a flavour">
-          <!-- buttons are generated from FLAVOURS in js/flavours.js -->
-        </div>
         <p class="flavours__now" aria-live="polite"><span id="flavour-name">Original</span> <span id="flavour-note" class="muted">The green one.</span></p>
 
         <div class="crack">
@@ -68,8 +65,13 @@
       </div>
 
       <div class="hero__stage" id="stage">
-        <canvas class="hero__can" id="can" aria-label="3D can of the selected flavour. Drag to spin it." role="img"></canvas>
-        <p class="hero__drag" aria-hidden="true">Drag to spin</p>
+        <img class="hero__claw" src="assets/brand/monster-claw.png" alt="" width="919" height="1250" />
+        <!-- the can wheel: buttons generated from FLAVOURS by js/wheel.js -->
+        <div class="wheel" id="wheel" role="radiogroup" aria-label="Choose a flavour"></div>
+        <div class="wheel__nav">
+          <button class="wheel__arrow" id="wheel-prev" type="button" aria-label="Previous can"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4 7 12l8 8" /></svg></button>
+          <button class="wheel__arrow" id="wheel-next" type="button" aria-label="Next can"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 4 8 8-8 8" /></svg></button>
+        </div>
       </div>
     </section>
 
@@ -86,7 +88,7 @@
       <div class="lineup__pin">
         <header class="lineup__head">
           <h2 id="lineup-title" class="h2">The lineup</h2>
-          <p class="muted">Six cans, one page. Scroll and the whole site takes the colour of the can in front of you.</p>
+          <p class="muted">Seven cans, one page. Scroll and the whole site takes the colour of the can in front of you.</p>
           <div class="lineup__progress" aria-hidden="true"><span id="lineup-bar"></span></div>
         </header>
         <div class="lineup__track" id="lineup-track">
@@ -155,18 +157,18 @@
     <div class="statement" id="statement">
       <h2 class="statement__title">This is a concept, not the real thing.</h2>
       <p>This website is an unofficial design concept made by Henrique Roquete Cacao as a portfolio piece. It is not affiliated with, endorsed by, sponsored by or connected to Monster Energy Company or any of its partners, and it is not an official Monster Energy website.</p>
-      <p>Monster Energy and the product names shown are trademarks of their respective owner and are used here only to describe the subject of the concept. No logos or packaging artwork from the brand are reproduced: the can labels are original illustrations. Nothing is sold here, the form sends nothing, and the events, copy and flavour notes are illustrative.</p>
+      <p>Monster Energy, the Monster "M" claw logo, the brand's slogans and the product names shown are trademarks of Monster Energy Company. They are used here only to illustrate a design concept, and all rights stay with their owner. The can images are the brand's own product shots, shown as part of the concept. Nothing is sold here, the form sends nothing, and the events, copy and flavour notes are illustrative.</p>
       <p>For the real brand, visit the official Monster Energy website.</p>
     </div>
     <div class="footer__base">
-      <span class="wordmark wordmark--footer"><span class="wordmark__big">Monster</span><span class="wordmark__small">Energy</span></span>
+      <img class="footer__logo" src="assets/brand/monster-lockup.png" alt="Monster Energy" width="2083" height="1801" />
       <p>Concept, design and build by Henrique Roquete Cacao, 2026.</p>
       <a href="#top">Back to top</a>
     </div>
   </footer>
 
   <script src="js/flavours.js"></script>
-  <script src="js/can3d.js"></script>
+  <script src="js/wheel.js"></script>
   <script src="js/bolts.js"></script>
   <script src="js/scenes.js"></script>
   <script src="js/main.js"></script>

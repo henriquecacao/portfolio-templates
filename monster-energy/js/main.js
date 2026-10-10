@@ -20,11 +20,13 @@
   const F = window.FLAVOURS;
 
   /* ---------------- 1. FLAVOUR STATE ---------------- */
-  let labels = F.map(f => drawLabel(f, document.createElement('canvas')));
   let current = 0;
 
-  const can = new Can3D($('#can'), { interactive: true });
-  if (can.failed) document.documentElement.classList.add('no-webgl');
+  // the can wheel in the hero: click a can, use the arrows, or swipe to turn it
+  const wheel = new CanWheel($('#wheel'), F, i => setFlavour(i));
+  const turn = d => setFlavour((current + d + F.length) % F.length);
+  $('#wheel-prev').addEventListener('click', () => turn(-1));
+  $('#wheel-next').addEventListener('click', () => turn(1));
 
   function setFlavour(i, { source = 'hero' } = {}) {
     if (i === current && source !== 'init') return;
@@ -32,31 +34,12 @@
     const f = F[i], root = document.documentElement.style;
     root.setProperty('--accent', f.accent);
     root.setProperty('--accent-ink', f.ink);
-    can.setFlavour(labels[i], f.accent, source !== 'init');
+    wheel.set(i);
     Bolts.color = f.accent;
     $('#flavour-name').textContent = f.name;
     $('#flavour-note').textContent = f.short;
-    $$('.flavour').forEach((b, k) => { b.setAttribute('aria-checked', k === i); b.tabIndex = k === i ? 0 : -1; });
     if (source !== 'init') glitch();
   }
-
-  // flavour picker: a radiogroup of little can-shaped swatches
-  const picker = $('.flavours');
-  F.forEach((f, i) => {
-    const b = document.createElement('button');
-    b.className = 'flavour'; b.type = 'button';
-    b.setAttribute('role', 'radio'); b.setAttribute('aria-label', f.name);
-    b.style.setProperty('--base', f.label.base); b.style.setProperty('--stripe', f.label.stripe);
-    b.addEventListener('click', () => setFlavour(i));
-    picker.append(b);
-  });
-  picker.addEventListener('keydown', e => {                       // arrow keys move within the group
-    const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-    if (!d) return;
-    e.preventDefault();
-    const n = (current + d + F.length) % F.length;
-    setFlavour(n); picker.children[n].focus();
-  });
 
   // headline glitch: an RGB-split jolt whenever the flavour changes or a can is cracked
   const title = $('#hero-title');
@@ -66,12 +49,11 @@
   }
 
   /* ---------------- 2. HERO ---------------- */
-  const stage = $('#stage'), boltCv = $('#bolts');
+  const boltCv = $('#bolts');
   Bolts.init(boltCv, () => {
-    // the can's on-screen box, relative to the arcs canvas (matches the camera in can3d.js)
-    const s = stage.getBoundingClientRect(), b = boltCv.getBoundingClientRect();
-    const hpx = s.height * .74, wpx = Math.min(s.width * .9, hpx * .4);
-    return { x: s.left - b.left + s.width / 2, y: s.top - b.top + s.height / 2, w: wpx, h: hpx };
+    // the front can's box, relative to the arcs canvas: arcs jump off its edges
+    const s = wheel.frontRect(), b = boltCv.getBoundingClientRect();
+    return { x: s.left - b.left + s.width / 2, y: s.top - b.top + s.height / 2, w: s.width * .9, h: s.height * .9 };
   });
 
   // hold-to-crack: charge fills over ~1.4 s, letting go early drains it
@@ -97,7 +79,7 @@
     cracked++; store.set('cracked', cracked); showCount();
     lbl.textContent = 'Cracked';
     setTimeout(() => lbl.textContent = 'Hold to crack', 1400);
-    Bolts.burst(); can.pop(); glitch();
+    Bolts.burst(); wheel.pop(); glitch();
     flash.classList.remove('is-on'); void flash.offsetWidth; flash.classList.add('is-on');
     const hero = $('.hero');
     if (!reduced) { hero.classList.remove('shake'); void hero.offsetWidth; hero.classList.add('shake'); }
@@ -105,6 +87,7 @@
   }
 
   // only animate the hero while it's on screen
+  const heroEl = $('.hero');
   let heroVisible = true;
   new IntersectionObserver(([e]) => heroVisible = e.isIntersecting).observe($('.hero'));
 
@@ -116,9 +99,10 @@
     if (charge >= 1) crack();
     fill.style.strokeDashoffset = RING * (1 - charge);
     btn.style.setProperty('--charge', charge.toFixed(3));
+    heroEl.style.setProperty('--charge', charge.toFixed(3));
     if (heroVisible) {
-      can.charge = charge; Bolts.charge = charge;
-      can.resize(); can.step(dt);
+      wheel.charge = charge; Bolts.charge = charge;
+      wheel.step(dt);
       Bolts.step(dt, now);
     }
     sceneFrame(now / 1000);
@@ -134,7 +118,7 @@
     a.className = 'panel';
     a.style.setProperty('--p-accent', f.accent); a.style.setProperty('--p-ink', f.ink);
     a.innerHTML = `
-      <div class="panel__can"><img alt="Concept can of ${f.name}" width="420" height="640" /></div>
+      <div class="panel__can"><img src="assets/cans/${f.id}.webp" alt="Monster Energy ${f.name} can" width="250" height="625" loading="lazy" /></div>
       <div class="panel__text">
         <p class="panel__tag">${f.sugar}, 500 ml</p>
         <h3 class="panel__name">${f.name}</h3>
@@ -145,10 +129,6 @@
     track.append(a);
   });
   const panels = $$('.panel', track);
-
-  function renderSnapshots() {
-    panels.forEach((p, i) => { const url = Can3D.snapshot(labels[i], F[i].accent, 420, 640, -.18); if (url) $('img', p).src = url; });
-  }
 
   // Desktop: the section is as tall as the track is wide; scrolling down slides the track left.
   const pinned = () => matchMedia('(min-width: 900px)').matches && !reduced;
@@ -221,7 +201,7 @@
   }
   function drawScene(t) {
     sg.clearRect(0, 0, sw, sh);
-    sg.save(); S[scene].draw(sg, sw, sh, t, getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#95D600'); sg.restore();
+    sg.save(); S[scene].draw(sg, sw, sh, t, getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#AEC90B'); sg.restore();
   }
   function sceneFrame(t) { if (sceneVisible && !reduced) drawScene(t); }
   new IntersectionObserver(([e]) => sceneVisible = e.isIntersecting).observe(sCv);
@@ -306,15 +286,8 @@
   /* ---------------- start ---------------- */
   setFlavour(0, { source: 'init' });
   pickScene(0); sizeScene(); renderEvents(); tick(); setInterval(tick, 1000);
-  renderSnapshots(); layoutLineup();
+  layoutLineup();
+  addEventListener('load', layoutLineup);     // re-measure once the can images have their size
   requestAnimationFrame(frame);
 
-  // once the web fonts arrive, repaint the labels so the cans use the real typeface
-  // (canvas text only uses a web font once it's loaded, so ask for the exact weights the labels use)
-  const want = ['900 100px "Big Shoulders Display"', '800 100px "Big Shoulders Display"', '600 30px "Chakra Petch"'];
-  document.fonts && Promise.all(want.map(f => document.fonts.load(f))).then(() => {
-    labels = F.map(f => drawLabel(f, document.createElement('canvas')));
-    can.setFlavour(labels[current], F[current].accent, false);
-    renderSnapshots(); layoutLineup();
-  });
 })();
