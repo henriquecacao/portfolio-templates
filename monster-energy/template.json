@@ -1,0 +1,16 @@
+{
+  "slug": "monster-energy",
+  "title": "Monster Energy",
+  "subtitle": "Energy drink brand one-pager",
+  "description": "Black-and-acid one-pager for an energy drink. A hand-built WebGL can you can spin, a hold-to-crack button that throws lightning and fizz, six flavours that recolour the whole site, a pinned sideways lineup and generative sport scenes.",
+  "category": "Food & drink",
+  "tags": ["WebGL", "3D can", "Canvas lightning", "Scroll-pinned lineup", "Generative scenes"],
+  "palette": ["#000000", "#1A1B18", "#B9BEC4", "#F2F4EE", "#95D600"],
+  "fonts": ["Big Shoulders Display", "Chakra Petch"],
+  "date": "2026-10-10",
+  "order": 4,
+  "concept": true,
+  "conceptNote": "Unofficial concept for a real brand. Not affiliated.",
+  "noindex": true,
+  "thumbnail": "thumbnail.webp"
+}

@@ -337,6 +337,9 @@
       'One-Pager Brand Templates': 'Single-page websites, each one a standalone live site with readable code. New ones appear here automatically.',
       'Portfolio': 'Design, art and 3D projects from my studies, each shown on a page built for it.'
     };
+    // order of the blocks on the page: personal work first, brand templates after.
+    // Any new section name not listed here goes after these, in manifest order.
+    const SECTION_ORDER = ['Portfolio', 'One-Pager Brand Templates'];
 
     function card(t, i) {
       return `
@@ -366,14 +369,16 @@
       .then(r => r.json())
       .then(({ templates }) => {
         if (!templates.length) { groups.innerHTML = '<p class="empty">First projects coming soon.</p>'; return; }
-        // group by section, keeping the manifest's order
+        // group by section (cards keep the manifest's order inside each block)
         const bySection = new Map();
         templates.forEach(t => {
           const k = t.section || DEFAULT_SECTION;
           if (!bySection.has(k)) bySection.set(k, []);
           bySection.get(k).push(t);
         });
-        groups.innerHTML = [...bySection].map(([name, items], gi) => {
+        const rank = n => { const i = SECTION_ORDER.indexOf(n); return i < 0 ? SECTION_ORDER.length : i; };
+        const sections = [...bySection].sort((x, y) => rank(x[0]) - rank(y[0]));   // stable: unlisted sections keep their order
+        groups.innerHTML = sections.map(([name, items], gi) => {
           const w = esc(name).split(' ');
           const title = w.length > 1 ? w.slice(0, -1).join(' ') + '<br>' + w[w.length - 1] : w[0];
           return `
