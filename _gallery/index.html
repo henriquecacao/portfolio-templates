@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-name-intro="slide">  <!-- name animation: "rise", "slide" (from the left) or "type" -->
+<html lang="en" data-name-intro="edge">  <!-- name animation: "edge" (flies in from the page edge), "rise", "slide" (from the left, masked) or "type" -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -46,7 +46,9 @@
       --muted: #A7A29B;
       --f-sans: "Jost", "Century Gothic", "Futura", system-ui, sans-serif;
       --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-      --wrap: 1180px;
+      --wrap: 1400px;
+      --gutter: clamp(16px, 3vw, 64px);   /* space kept at each side of the page */
+      --photo-shadow: 4px 4px 0 rgba(0,0,0,.5);   /* portrait frame shadow */
     }
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -58,14 +60,14 @@
     }
     a { color: inherit; }
     img { display: block; max-width: 100%; }
-    .wrap { width: min(100% - 32px, var(--wrap)); margin-inline: auto; }
+    .wrap { width: min(100% - 2 * var(--gutter), var(--wrap)); margin-inline: auto; }
     ::selection { background: var(--orange); color: var(--black); }
     :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 
     /* ---------- shared pieces ---------- */
     .tab {            /* orange label tab, straight from the CV */
       display: inline-block; background: var(--orange); color: var(--black);
-      font: 600 13px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase;
+      font: 700 14.5px/1 var(--f-sans); letter-spacing: .13em; text-transform: uppercase;   /* bold Jost: thin strokes get lost on the bright orange */
       padding: 9px 14px; box-shadow: 4px 4px 0 rgba(0,0,0,.6);
     }
     .frame {          /* panel with an offset orange outline */
@@ -93,10 +95,16 @@
     /* even rhythm: every line gets the same room, enough for the tilde on Ã and the Ç cedilla */
     .hero h1 span + span { margin-top: .14em; }
     .hero h1 .o { color: var(--orange); }
+    /* optical alignment: big letters carry a little built-in space on their left
+       (Jost: H and R .078em, C .031em), so each line is pulled back by exactly that
+       much and the ink lines up with the edge of the "Graphic Designer" tab */
+    .hero h1 > span { margin-left: -.078em; }
+    .hero h1 > span:nth-child(3) { margin-left: -.031em; }   /* CAÇÃO starts with a round C */
+    .lead { margin-left: -.07em; }
     .lead { font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.45; max-width: 34ch; margin: 0 0 30px; color: #E6E1DA; }
     .lead b { color: var(--orange); font-weight: 500; }
     .ctas { display: flex; flex-wrap: wrap; gap: 14px; }
-    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 24px; text-decoration: none; font: 600 14px var(--f-mono); letter-spacing: .05em; text-transform: uppercase; border: 2px solid var(--orange); transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 24px; text-decoration: none; font: 700 15px var(--f-sans); letter-spacing: .11em; text-transform: uppercase; border: 2px solid var(--orange); transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
     .btn--fill { background: var(--orange); color: var(--black); box-shadow: 5px 5px 0 #000; }
     .btn--fill:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 #000; }
     .btn--line { color: var(--orange); }
@@ -106,9 +114,14 @@
     .portrait { position: relative; margin: 0; justify-self: end; width: min(100%, 320px); }
     .portrait .frame, .portrait figcaption { position: relative; z-index: 1; }   /* above the sphere */
     /* dotted sphere behind the portrait: canvas added and positioned by site-motion.js */
-    .orb { position: absolute; left: 44%; top: 50%; width: 215%; aspect-ratio: 1; transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: opacity 1.2s ease .3s; }
+    .hero .wrap > div:first-child { position: relative; z-index: 2; }   /* name, intro and buttons always sit above the sphere */
+    .orb { position: absolute; left: -50%; top: 50%; width: 215%; aspect-ratio: 1; transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: opacity 1.2s ease .3s; }
     .orb.is-on { opacity: 1; }
-    .portrait .frame { padding: 12px; transform: rotate(2deg); transition: transform .4s; }
+    /* the globe can be grabbed and turned with the mouse (site-motion.js toggles these) */
+    html.orb-hover, html.orb-hover * { cursor: grab !important; }
+    html.orb-dragging, html.orb-dragging * { cursor: grabbing !important; user-select: none; }
+    /* thinner frame and a small, lighter shadow than the other panels */
+    .portrait .frame { padding: 5px; border-width: 1.5px; box-shadow: var(--photo-shadow); transform: rotate(2deg); transition: transform .4s; }
     .portrait:hover .frame { transform: rotate(0deg); }
     .duo { position: relative; aspect-ratio: 232 / 295; background: #000; overflow: hidden; border: 2px solid #000; }
     .duo img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
@@ -129,7 +142,7 @@
     /* ---------- sections ---------- */
     section { padding: clamp(64px, 9vw, 120px) 0; }
     .sec-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 40px; }
-    .sec-head h2 { margin: 14px 0 0; font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: .95; letter-spacing: -.03em; text-transform: uppercase; }
+    .sec-head h2 { margin: 14px 0 0 -.078em; font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: .95; letter-spacing: -.03em; text-transform: uppercase; }
     .sec-head p { margin: 0; color: var(--muted); max-width: 42ch; }
 
     /* work grid (rendered from templates.json, grouped by section) */
@@ -137,7 +150,7 @@
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
     /* card = flat black shadow + the panel on top. Hover only moves the panel (transform),
        so the gap to the shadow grows and the card reads as lifted. */
-    .card { position: relative; display: flex; perspective: 1000px; }
+    .card { position: relative; display: flex; }
     .card__shadow { position: absolute; inset: 8px -8px -8px 8px; background: #000; transform-origin: 50% 60%; }  /* offset via inset, so transforms stay free for motion */
     .card__in { flex: 1; display: flex; flex-direction: column; box-shadow: none; transition: transform .25s; }
     .card:hover .card__in { transform: translate(-3px, -3px); }   /* simple lift when the pick-up motion isn't running */
@@ -201,8 +214,8 @@
     /* contact */
     .contact { border-top: 1px solid var(--line); }
     .contact .frame { padding: clamp(28px, 5vw, 64px); display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: end; }
-    .contact h2 { margin: 16px 0 0; font-weight: 800; text-transform: uppercase; letter-spacing: -.035em; line-height: .92; font-size: clamp(2.4rem, 7vw, 5.6rem); }
-    .contact h2 a { color: var(--orange); text-decoration: none; display: inline-block; word-break: break-all; font-size: .42em; letter-spacing: -.01em; margin-top: 18px; border-bottom: 3px solid var(--orange); }
+    .contact h2 { margin: 16px 0 0 -.078em; font-weight: 800; text-transform: uppercase; letter-spacing: -.035em; line-height: .92; font-size: clamp(2.4rem, 7vw, 5.6rem); }
+    .contact h2 a { color: var(--orange); text-decoration: none; display: inline-block; word-break: break-all; font-size: .42em; letter-spacing: -.01em; margin-top: 18px; margin-left: .186em; border-bottom: 3px solid var(--orange); }   /* undo the h2 pull so the underline starts on the edge */
     .contact h2 a:hover { color: var(--ink); }
     .contact-side { display: grid; gap: 18px; justify-items: end; }
     .contact-side .label { margin: 0; }
@@ -220,6 +233,8 @@
     /* name starting states, one per data-name-intro style on <html> */
     .motion[data-name-intro="rise"] .hero h1 .ln { opacity: 0; transform: translateY(150%); }
     .motion[data-name-intro="slide"] .hero h1 .ln { opacity: 0; transform: translateX(-110%); }
+    .motion[data-name-intro="edge"] .hero h1 .ln { transform: translateX(-100vw); }   /* waits just off the left edge of the page */
+    [data-name-intro="edge"] .hero h1 > span { clip-path: none; }                       /* no mask: the lines travel across the page */
     .motion[data-name-intro="type"] .hero h1 .ln { opacity: 0; }
     .hero h1 { position: relative; }   /* anchors the typing cursor */
     .type-caret { position: absolute; left: 0; top: 0; width: .34em; height: .74em; background: var(--orange); pointer-events: none; }
@@ -230,6 +245,7 @@
     @media (max-width: 900px) {
       .hero .wrap, .about-grid { grid-template-columns: 1fr; }
       .portrait { justify-self: start; width: min(70%, 280px); order: -1; }
+      .orb { left: 44%; }   /* stacked layout: no space beside the name, so the sphere stays behind the photo */
       .timeline { grid-template-columns: 1fr 1fr; row-gap: 34px; }
       .nav ul { display: none; }
     }
