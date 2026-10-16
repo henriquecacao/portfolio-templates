@@ -1,8 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-name-intro="slide">  <!-- name animation: "rise", "slide" (from the left) or "type" -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Motion flag, set before the first paint. "motion" turns on the hidden starting
+       states for the entrance animations (see "motion" in the CSS). It is only added when
+       JavaScript runs and the visitor hasn't asked for reduced motion, and it is removed
+       again after 3 s if the animation code never arrives, so nothing can stay invisible. -->
+  <script>
+    (function (root) {
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      root.classList.add('motion');
+      setTimeout(function () { if (!window.siteMotionReady) root.classList.remove('motion'); }, 3000);
+    })(document.documentElement);
+  </script>
   <title>Henrique Roquete Cação — Website templates built with AI</title>
   <meta name="description" content="Henrique Roquete Cação, a Global Design student at IADE in Lisbon, designs website templates and builds them with AI tools." />
   <meta name="theme-color" content="#0B0B0B" />
@@ -75,7 +86,7 @@
     @keyframes pulse { 50% { box-shadow: 0 0 0 8px rgba(255,122,26,0); } }
 
     /* ---------- hero ---------- */
-    .hero { padding: clamp(48px, 8vw, 110px) 0 clamp(56px, 8vw, 100px); border-bottom: 1px solid var(--line); }
+    .hero { padding: clamp(48px, 8vw, 110px) 0 clamp(56px, 8vw, 100px); border-bottom: 1px solid var(--line); overflow: clip; }  /* clip: the sphere is wider than the portrait column */
     .hero .wrap { display: grid; grid-template-columns: 1.35fr .65fr; gap: clamp(28px, 5vw, 70px); align-items: center; }
     .hero h1 { margin: 22px 0 26px; font-weight: 800; text-transform: uppercase; line-height: .9; letter-spacing: -.035em; font-size: clamp(3.2rem, 9.5vw, 8.4rem); padding-bottom: .08em; }
     .hero h1 span { display: block; }
@@ -92,13 +103,18 @@
     .btn--line:hover { background: var(--orange); color: var(--black); }
 
     /* portrait: original colours inside the black + orange frame */
-    .portrait { margin: 0; justify-self: end; width: min(100%, 320px); }
+    .portrait { position: relative; margin: 0; justify-self: end; width: min(100%, 320px); }
+    .portrait .frame, .portrait figcaption { position: relative; z-index: 1; }   /* above the sphere */
+    /* dotted sphere behind the portrait: canvas added and positioned by site-motion.js */
+    .orb { position: absolute; left: 44%; top: 50%; width: 215%; aspect-ratio: 1; transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: opacity 1.2s ease .3s; }
+    .orb.is-on { opacity: 1; }
     .portrait .frame { padding: 12px; transform: rotate(2deg); transition: transform .4s; }
     .portrait:hover .frame { transform: rotate(0deg); }
     .duo { position: relative; aspect-ratio: 232 / 295; background: #000; overflow: hidden; border: 2px solid #000; }
     .duo img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
     .portrait:hover .duo img { transform: scale(1.04); }
     .portrait figcaption { display: flex; justify-content: space-between; margin-top: 12px; padding: 0 2px; }
+    .portrait figcaption .label { background: var(--black); padding: 2px 4px; }   /* stays readable over the sphere dots */
 
     /* ---------- marquee of tools ---------- */
     .ticker { background: var(--orange); color: var(--black); overflow: hidden; white-space: nowrap; border-block: 2px solid var(--black); }
@@ -119,8 +135,18 @@
     /* work grid (rendered from templates.json, grouped by section) */
     .group + .group { margin-top: clamp(64px, 8vw, 110px); }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
-    .card { display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s; }
-    .card:hover { transform: translate(-3px, -3px); box-shadow: 11px 11px 0 #000; }
+    /* card = flat black shadow + the panel on top. Hover only moves the panel (transform),
+       so the gap to the shadow grows and the card reads as lifted. */
+    .card { position: relative; display: flex; perspective: 1000px; }
+    .card__shadow { position: absolute; inset: 8px -8px -8px 8px; background: #000; transform-origin: 50% 60%; }  /* offset via inset, so transforms stay free for motion */
+    .card__in { flex: 1; display: flex; flex-direction: column; box-shadow: none; transition: transform .25s; }
+    .card:hover .card__in { transform: translate(-3px, -3px); }   /* simple lift when the pick-up motion isn't running */
+    .card:hover, .card:focus-within { z-index: 2; }                 /* a lifted card sits above its neighbours */
+    .pickup-on .card__in { transition: none; }                      /* site-motion.js drives the transform */
+    .pickup-on .card:hover .card__in { transform: none; }
+    /* glint: a soft light band that sweeps across the thumbnail when a card is picked up */
+    .card__glint { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .card__glint i { position: absolute; inset: -20% auto -20% 0; width: 45%; background: linear-gradient(100deg, transparent, rgba(255,240,220,.38), transparent); transform: translateX(-120%) skewX(-12deg); opacity: 0; }
     .card .thumb { display: block; aspect-ratio: 16 / 10; background: var(--panel-2) center / cover no-repeat; border-bottom: 2px solid var(--orange); position: relative; }
     .card .num { position: absolute; top: -2px; left: -2px; }
     .card .body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
@@ -185,9 +211,20 @@
     footer { padding: 28px 0 40px; }
     footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 
-    /* reveal on scroll */
-    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s, transform .7s; }
-    .reveal.in { opacity: 1; transform: none; }
+    /* reveal on scroll (sections). Hidden only while the "motion" flag is on. */
+    .motion .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s, transform .7s; }
+    .motion .reveal.in { opacity: 1; transform: none; }
+
+    /* starting states for the Motion entrances in site-motion.js (only with the "motion" flag) */
+    .hero h1 > span { clip-path: inset(-.5em -.3em -.25em -.3em); }   /* each line is its own mask; room left for Ã and Ç */
+    /* name starting states, one per data-name-intro style on <html> */
+    .motion[data-name-intro="rise"] .hero h1 .ln { opacity: 0; transform: translateY(150%); }
+    .motion[data-name-intro="slide"] .hero h1 .ln { opacity: 0; transform: translateX(-110%); }
+    .motion[data-name-intro="type"] .hero h1 .ln { opacity: 0; }
+    .hero h1 { position: relative; }   /* anchors the typing cursor */
+    .type-caret { position: absolute; left: 0; top: 0; width: .34em; height: .74em; background: var(--orange); pointer-events: none; }
+    .motion [data-intro] { opacity: 0; transform: translateY(14px); }
+    .motion .card { opacity: 0; transform: translateY(32px); }
 
     /* ---------- responsive ---------- */
     @media (max-width: 900px) {
@@ -207,7 +244,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .reveal { opacity: 1; transform: none; }
+      .card:hover .card__in { transform: none; }   /* still means still */
     }
   </style>
 </head>
@@ -230,10 +267,10 @@
     <section class="hero">
       <div class="wrap">
         <div>
-          <span class="tab">Graphic Designer</span>
-          <h1><span class="o">Henrique</span><span>Roquete</span><span>Cação</span></h1>
-          <p class="lead">I design websites and <b>build them with AI.</b> Each template here is a real, working site, from the visual concept to the code.</p>
-          <div class="ctas">
+          <span class="tab" data-intro>Graphic Designer</span>
+          <h1><span class="o"><span class="ln">Henrique</span></span><span><span class="ln">Roquete</span></span><span><span class="ln">Cação</span></span></h1>
+          <p class="lead" data-intro>I design websites and <b>build them with AI.</b> Each template here is a real, working site, from the visual concept to the code.</p>
+          <div class="ctas" data-intro>
             <a class="btn btn--fill" href="#work">See my work ↓</a>
             <a class="btn btn--line" href="#contact">Get in touch</a>
           </div>
@@ -264,8 +301,13 @@
     <section id="work">
       <div class="wrap">
         <!-- One block per "section" in template.json (e.g. One-Pager Brand Templates).
-             A new section name automatically becomes a new block. -->
-        <div id="groups"></div>
+             A new section name automatically becomes a new block.
+             The build (scripts/build.mjs) writes the cards between the two markers below,
+             so they show without JavaScript. Keep both markers. -->
+        <div id="groups"><!-- cards:start -->
+          <!-- placeholder: the build replaces everything between the markers with the real cards -->
+          <p class="empty">The projects are added when the site is built. To preview locally, run <code>node scripts/build.mjs</code>, then <code>npx serve dist</code>.</p>
+        <!-- cards:end --></div>
       </div>
     </section>
 
@@ -284,7 +326,12 @@
           <div class="facts">
             <div class="frame reveal">
               <h3>Languages</h3>
-              <ul class="langs" id="langs"></ul>
+              <ul class="langs">
+                <li><span>Portuguese</span><span class="dots" aria-label="5 of 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+                <li><span>English</span><span class="dots" aria-label="5 of 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+                <li><span>Spanish</span><span class="dots" aria-label="2 of 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></li>
+                <li><span>German</span><span class="dots" aria-label="1 of 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></li>
+              </ul>
             </div>
             <div class="frame reveal">
               <h3>Tools</h3>
@@ -339,85 +386,34 @@
   </footer>
 
   <script>
-    // ---------- languages (level 1–5, from my CV) ----------
-    const LANGS = [['Portuguese', 5], ['English', 5], ['Spanish', 2], ['German', 1]];
-    document.getElementById('langs').innerHTML = LANGS.map(([n, l]) =>
-      `<li><span>${n}</span><span class="dots" aria-label="${l} of 5">${[1,2,3,4,5].map(i => `<i class="${i <= l ? 'on' : ''}"></i>`).join('')}</span></li>`).join('');
-
     // ---------- seamless ticker ----------
     const t = document.getElementById('ticker'); t.innerHTML += t.innerHTML;
     // tools carousel: repeat each row so the loop never shows a gap
     document.querySelectorAll('.tools__row').forEach(r => { const h = r.innerHTML; r.innerHTML = h + h + h + h; r.setAttribute('aria-hidden', 'true'); });
 
-    // ---------- templates, rendered from the manifest the build creates ----------
-    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    const groups = document.getElementById('groups');
-    const DEFAULT_SECTION = 'One-Pager Brand Templates';
-    const INTRO = {   // optional one-liner per section; others show a project count
-      'One-Pager Brand Templates': 'Single-page websites, each one a standalone live site with readable code. New ones appear here automatically.',
-      'Portfolio': 'Design, art and 3D projects from my studies, each shown on a page built for it.'
-    };
-    // order of the blocks on the page: personal work first, brand templates after.
-    // Any new section name not listed here goes after these, in manifest order.
-    const SECTION_ORDER = ['Portfolio', 'One-Pager Brand Templates'];
-
-    function card(t, i) {
-      return `
-          <article class="card frame reveal">
-            <a class="thumb" href="${esc(t.url)}" aria-label="Open ${esc(t.title)}" style="${t.thumbnail ? `background-image:url('${esc(t.thumbnail)}')` : ''}">
-              <span class="tab num">${String(i + 1).padStart(2, '0')}</span>
-            </a>
-            <div class="body">
-              <h3>${esc(t.title)}</h3>
-              ${t.subtitle ? `<p class="sub">${esc(t.subtitle)}</p>` : ''}
-              <p class="desc">${esc(t.description)}</p>
-              <div class="meta">
-                ${t.palette ? `<div class="palette">${t.palette.map(c => `<i style="background:${esc(c)}"></i>`).join('')}</div>` : '<span></span>'}
-                <span class="label">${esc(t.dateLabel || t.date)}</span>
-              </div>
-              ${t.tags ? `<div class="tags">${t.tags.map(x => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
-              ${t.concept ? `<p class="concept">⚑ ${esc(t.conceptNote || 'Unofficial concept')}</p>` : ''}
-              <div class="links">
-                <a class="btn btn--fill" href="${esc(t.url)}">${esc(t.cta || 'Open live ↗')}</a>
-                ${t.source ? `<a class="btn btn--line" href="${esc(t.source)}">Code</a>` : ''}
-              </div>
-            </div>
-          </article>`;
-    }
-
-    fetch('templates.json', { cache: 'no-store' })
-      .then(r => r.json())
-      .then(({ templates }) => {
-        if (!templates.length) { groups.innerHTML = '<p class="empty">First projects coming soon.</p>'; return; }
-        // group by section (cards keep the manifest's order inside each block)
-        const bySection = new Map();
-        templates.forEach(t => {
-          const k = t.section || DEFAULT_SECTION;
-          if (!bySection.has(k)) bySection.set(k, []);
-          bySection.get(k).push(t);
-        });
-        const rank = n => { const i = SECTION_ORDER.indexOf(n); return i < 0 ? SECTION_ORDER.length : i; };
-        const sections = [...bySection].sort((x, y) => rank(x[0]) - rank(y[0]));   // stable: unlisted sections keep their order
-        groups.innerHTML = sections.map(([name, items], gi) => {
-          const w = esc(name).split(' ');
-          const title = w.length > 1 ? w.slice(0, -1).join(' ') + '<br>' + w[w.length - 1] : w[0];
-          return `
-          <div class="group">
-            <div class="sec-head reveal">
-              <div>${gi === 0 ? '<span class="tab">Work</span>' : ''}<h2>${title}</h2></div>
-              <p>${esc(INTRO[name] || `${items.length} project${items.length === 1 ? '' : 's'}`)}</p>
-            </div>
-            <div class="grid">${items.map(card).join('')}</div>
-          </div>`;
-        }).join('');
-        observe();
-      })
-      .catch(() => { groups.innerHTML = '<p class="empty">Projects load once the site is deployed.</p>'; });
-
     // ---------- reveal on scroll ----------
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
     function observe() { document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el)); }
     observe();
+  </script>
+
+  <!-- Motion (motion.dev, MIT licence in assets/js/vendor/motion-LICENSE.md), loaded as a
+       plain script that exposes window.Motion, then the site's own motion code. -->
+  <script src="assets/js/vendor/motion-14.3.0.js" defer></script>
+  <script src="assets/js/site-motion.js" defer></script>
+
+  <!-- Work cards fallback: only runs when the build didn't already write the cards in
+       (e.g. opening _gallery/index.html straight from the repo). Same markup, from cards.mjs. -->
+  <script type="module">
+    import { renderGroups } from './assets/js/cards.mjs';
+    const groups = document.getElementById('groups');
+    if (!groups.querySelector('.group')) {   // no built cards yet (the placeholder doesn't count)
+      fetch('templates.json', { cache: 'no-store' })
+        .then(r => r.json())
+        .then(({ templates }) => { groups.innerHTML = renderGroups(templates); })
+        .catch(() => { groups.innerHTML = '<p class="empty">Projects load once the site is deployed.</p>'; })
+        .finally(() => { observe(); document.dispatchEvent(new CustomEvent('cards:rendered')); });
+    }
   </script>
 </body>
 </html>

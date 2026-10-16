@@ -7,13 +7,14 @@
      1. copy the folder to dist/<slug>/
      2. if "noindex": true, inject <meta name="robots" content="noindex">
      3. add its metadata to dist/templates.json  ← the portfolio reads this
-   Then copy the small template index page (_gallery/) to dist/.
+   Then copy the small template index page (_gallery/) to dist/ and write
+   the Work cards into it, so they show even without JavaScript.
 
    Run locally:  node scripts/build.mjs   →  open dist/index.html
    ========================================================= */
 import { readdir, readFile, writeFile, mkdir, cp, rm, stat } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
@@ -94,6 +95,14 @@ async function main() {
   await writeFile(join(DIST, 'robots.txt'), ['User-agent: *', ...blocked, ''].join('\n'));
 
   await cp(join(ROOT, '_gallery'), DIST, { recursive: true });
+
+  // 4. write the Work cards into the landing page (same markup the browser fallback uses)
+  const { renderGroups } = await import(pathToFileURL(join(ROOT, '_gallery', 'assets', 'js', 'cards.mjs')).href);
+  const pagePath = join(DIST, 'index.html');
+  const page = await readFile(pagePath, 'utf8');
+  const CARDS = /<!-- cards:start -->[\s\S]*?<!-- cards:end -->/;
+  if (!CARDS.test(page)) throw new Error('_gallery/index.html is missing the <!-- cards:start --> / <!-- cards:end --> markers');
+  await writeFile(pagePath, page.replace(CARDS, () => `<!-- cards:start -->${renderGroups(templates)}\n        <!-- cards:end -->`));
   console.log(`\nBuilt ${templates.length} template(s) → dist/`);
 }
 
